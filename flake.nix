@@ -24,20 +24,11 @@
       ];
 
       perSystem = { pkgs, system, self', config, inputs', lib,... }: {
-          mission-control.scripts = {
-              hello = {
-                  description = "say hi";
-                  exec = "echo hi";
-                };
-                          fmt = {
-            description = "Format the top-level Nix files";
-            exec = "${lib.getExe pkgs.nixpkgs-fmt} ./*.nix";
-            category = "Tools";
-          };
-            };
         devShells.default = pkgs.mkShell {
-
-          inputsFrom = [ config.mission-control.devShell ];
+          nativeBuildInputs = with pkgs; [
+            just
+            config.treefmt.build.wrapper
+          ];
           };
         };
 
