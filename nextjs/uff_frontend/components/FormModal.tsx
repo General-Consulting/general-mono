@@ -1,11 +1,11 @@
-'use client'
+"use client";
 
-import { Fragment, ReactNode } from 'react'
-import { Dialog, Transition } from '@headlessui/react'
-import { PencilIcon } from '@heroicons/react/24/outline'
+import { Fragment, ReactNode } from "react";
+import { Dialog, Transition } from "@headlessui/react";
+import { PencilIcon } from "@heroicons/react/24/outline";
 
-import DefaultButton from './DefaultButton'
-import HighlightButton from './HighlightButton';
+import DefaultButton from "./DefaultButton";
+import HighlightButton from "./HighlightButton";
 
 interface FormModalProps {
   title: string;
@@ -15,7 +15,6 @@ interface FormModalProps {
   children: ReactNode;
 }
 
-
 const FormModal = ({
   children,
   title,
@@ -23,9 +22,8 @@ const FormModal = ({
   onCancel,
   onSave,
 }: FormModalProps) => {
-  
-  const handleSave = () => onSave()
-  const handleCancel = () => onCancel() 
+  const handleSave = () => onSave();
+  const handleCancel = () => onCancel();
 
   return (
     <Transition.Root show={isOpen} as={Fragment}>
@@ -56,15 +54,19 @@ const FormModal = ({
               <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6">
                 <div>
                   <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-indigo-100">
-                    <PencilIcon className="h-6 w-6 text-indigo-600" aria-hidden="true" />
+                    <PencilIcon
+                      className="h-6 w-6 text-indigo-600"
+                      aria-hidden="true"
+                    />
                   </div>
                   <div className="mt-3 text-center sm:mt-5">
-                    <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
+                    <Dialog.Title
+                      as="h3"
+                      className="text-base font-semibold leading-6 text-gray-900"
+                    >
                       {title}
                     </Dialog.Title>
-                    <div className="mt-2">
-                      {children}
-                    </div>
+                    <div className="mt-2">{children}</div>
                   </div>
                 </div>
                 <hr className="h-px mt-4 sm:mt-6 mb-4 sm:mb-10 bg-gray-200 border-0 dark:bg-gray-700"></hr>
@@ -88,7 +90,7 @@ const FormModal = ({
         </div>
       </Dialog>
     </Transition.Root>
-  )
-}
+  );
+};
 
-export default FormModal
+export default FormModal;

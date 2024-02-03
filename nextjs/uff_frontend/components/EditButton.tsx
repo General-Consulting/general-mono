@@ -1,15 +1,14 @@
-'use client'
+"use client";
 
-import { PencilIcon } from '@heroicons/react/24/outline'
-import clsx from 'clsx';
+import { PencilIcon } from "@heroicons/react/24/outline";
+import clsx from "clsx";
 
 interface EditButtonProps {
   onClick: () => void;
 }
 
 const EditButton = ({ onClick }: EditButtonProps) => {
-
-  const handleClick = () => onClick()
+  const handleClick = () => onClick();
 
   return (
     <button
@@ -31,7 +30,7 @@ const EditButton = ({ onClick }: EditButtonProps) => {
     >
       <PencilIcon className="h-4 w-4" aria-hidden="true" />
     </button>
-  )
-}
+  );
+};
 
-export default EditButton
+export default EditButton;

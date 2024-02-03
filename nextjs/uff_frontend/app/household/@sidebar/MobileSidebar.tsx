@@ -1,34 +1,27 @@
-'use client'
+"use client";
 
-import { Fragment, Dispatch, SetStateAction } from 'react';
-import { Dialog, Transition } from '@headlessui/react';
-import { XMarkIcon } from '@heroicons/react/24/outline';
+import { Fragment, Dispatch, SetStateAction } from "react";
+import { Dialog, Transition } from "@headlessui/react";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 
-import SidebarNavigation from './SidebarNavigation';
-import SidebarProfile from './SidebarProfile';
+import SidebarNavigation from "./SidebarNavigation";
+import SidebarProfile from "./SidebarProfile";
 
 interface MobileSidebarProps {
-  sidebarOpen: boolean,
-  setSidebarOpen: Dispatch<SetStateAction<boolean>>
+  sidebarOpen: boolean;
+  setSidebarOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-const MobileSidebar = ({
-  sidebarOpen,
-  setSidebarOpen
-}: MobileSidebarProps) => {
-  const handleCloseSidebar = () => setSidebarOpen(false)
-
+const MobileSidebar = ({ sidebarOpen, setSidebarOpen }: MobileSidebarProps) => {
+  const handleCloseSidebar = () => setSidebarOpen(false);
 
   return (
     <>
-      <Transition.Root 
-        as={Fragment}
-        show={sidebarOpen} 
-      >
-        <Dialog 
-          as="div" 
+      <Transition.Root as={Fragment} show={sidebarOpen}>
+        <Dialog
+          as="div"
           onClose={handleCloseSidebar}
-          className="relative z-50 lg:hidden" 
+          className="relative z-50 lg:hidden"
         >
           <Transition.Child
             as={Fragment}
@@ -63,17 +56,15 @@ const MobileSidebar = ({
                   leaveTo="opacity-0"
                 >
                   <div className="absolute left-full top-0 flex w-16 justify-center pt-5">
-                    <button 
-                      type="button" 
+                    <button
+                      type="button"
                       onClick={handleCloseSidebar}
-                      className="-m-2.5 p-2.5" 
+                      className="-m-2.5 p-2.5"
                     >
-                      <span className="sr-only">
-                        Close sidebar
-                      </span>
-                      <XMarkIcon 
-                        aria-hidden="true" 
-                        className="h-6 w-6 text-white" 
+                      <span className="sr-only">Close sidebar</span>
+                      <XMarkIcon
+                        aria-hidden="true"
+                        className="h-6 w-6 text-white"
                       />
                     </button>
                   </div>

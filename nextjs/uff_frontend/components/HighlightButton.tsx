@@ -1,19 +1,19 @@
-'use client'
+"use client";
 
 import { clsx } from "clsx";
 import { ReactNode } from "react";
 
 interface HighlightButtonProps {
   onClick: () => void;
-  className?: string
-  children: ReactNode
+  className?: string;
+  children: ReactNode;
 }
 
 // Define the HighlightButton component
 const HighlightButton = ({
   onClick,
   className,
-  children 
+  children,
 }: HighlightButtonProps) => {
   return (
     <div className="mt-4 sm:mt-0 sm:flex-none">
@@ -52,7 +52,7 @@ const HighlightButton = ({
         {children}
       </button>
     </div>
-  )
-}
+  );
+};
 
-export default HighlightButton
+export default HighlightButton;

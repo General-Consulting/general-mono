@@ -144,7 +144,8 @@
         "flake-root": "flake-root",
         "flake-utils": "flake-utils_2",
         "mission-control": "mission-control",
-        "nixpkgs": "nixpkgs_2"
+        "nixpkgs": "nixpkgs_2",
+        "treefmt-nix": "treefmt-nix"
       }
     },
     "systems": {
@@ -174,6 +175,26 @@
       "original": {
         "owner": "nix-systems",
         "repo": "default",
+        "type": "github"
+      }
+    },
+    "treefmt-nix": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1706462057,
+        "narHash": "sha256-7dG1D4iqqt0bEbBqUWk6lZiSqqwwAO0Hd1L5opVyhNM=",
+        "owner": "numtide",
+        "repo": "treefmt-nix",
+        "rev": "c6153c2a3ff4c38d231e3ae99af29b87f1df5901",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "treefmt-nix",
         "type": "github"
       }
     }

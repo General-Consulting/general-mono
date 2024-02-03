@@ -1,5 +1,5 @@
-'use client'
+"use client";
 
-import PageComponent from "./page"
+import PageComponent from "./page";
 
-export default PageComponent
+export default PageComponent;

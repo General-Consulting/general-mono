@@ -1,27 +1,18 @@
-'use client'
+"use client";
 
-import { Fragment, useState } from "react"
+import { Fragment, useState } from "react";
 
-
-
-import FormModal from "@/components/FormModal"
-import { 
-  TableContainer,
-  TableTitle,
-  Table,
-
-} from "@/components/Table"
-import HighlightButton from "@/components/HighlightButton"
-import MemberFields from "./MemberFields"
-import useMembersSubset from "@/store/useMembersSubset"
-
-
+import FormModal from "@/components/FormModal";
+import { TableContainer, TableTitle, Table } from "@/components/Table";
+import HighlightButton from "@/components/HighlightButton";
+import MemberFields from "./MemberFields";
+import useMembersSubset from "@/store/useMembersSubset";
 
 const MembersTable = () => {
-  const [ openModal, setOpenModal ] = useState('')
-  const membersSubset = useMembersSubset()
+  const [openModal, setOpenModal] = useState("");
+  const membersSubset = useMembersSubset();
 
-  console.log('membersSubset', membersSubset)
+  console.log("membersSubset", membersSubset);
 
   return (
     <TableContainer>
@@ -31,22 +22,18 @@ const MembersTable = () => {
       />
       <Table
         tableData={membersSubset}
-        onEdit={() => console.log('Edit!')}
-        onDelete={() => console.log('Delete!')}
+        onEdit={() => console.log("Edit!")}
+        onDelete={() => console.log("Delete!")}
       />
       <HighlightButton
         onClick={() => {
-          console.log('Clicked add member, add functionality :)')
-        }} 
+          console.log("Clicked add member, add functionality :)");
+        }}
       >
         Add
       </HighlightButton>
     </TableContainer>
+  );
+};
 
-
-
-  )
-
-}
-
-export default MembersTable
+export default MembersTable;

@@ -1,6 +1,6 @@
-'use client'
+"use client";
 
-import { useState } from "react"
+import { useState } from "react";
 
 import DesktopSidebar from "./DesktopSidebar";
 import MobileTopBar from "./MenuTopBar";
@@ -12,20 +12,18 @@ const PageComponent = () => {
   return (
     <>
       {/* Mobile sidebar */}
-      <MobileSidebar 
+      <MobileSidebar
         sidebarOpen={sidebarOpen}
-        setSidebarOpen={setSidebarOpen} 
+        setSidebarOpen={setSidebarOpen}
       />
 
       {/* Static sidebar for desktop */}
       <DesktopSidebar />
 
       {/* Mobile top bar */}
-      <MobileTopBar 
-        setSidebarOpen={setSidebarOpen} 
-      />
+      <MobileTopBar setSidebarOpen={setSidebarOpen} />
     </>
   );
 };
 
-export default PageComponent
+export default PageComponent;

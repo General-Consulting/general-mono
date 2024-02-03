@@ -1,18 +1,18 @@
-'use client'
+"use client";
 
 // SidebarNavigation.tsx
-import { Fragment } from "react"
-import { 
-  HomeIcon, 
+import { Fragment } from "react";
+import {
+  HomeIcon,
   UsersIcon,
-  UserIcon, 
-  FolderIcon, 
-  CalendarIcon, 
-  DocumentDuplicateIcon, 
-  ChartPieIcon 
-} from '@heroicons/react/24/outline';
+  UserIcon,
+  FolderIcon,
+  CalendarIcon,
+  DocumentDuplicateIcon,
+  ChartPieIcon,
+} from "@heroicons/react/24/outline";
 
-import SidebarNavLink from "./SidebarNavLink"
+import SidebarNavLink from "./SidebarNavLink";
 import useMembersSubset from "@/store/useMembersSubset";
 import { MemberSubset } from "@/types";
 
@@ -21,27 +21,26 @@ const ListDividerLine = () => {
     <li>
       <hr className="bg-gray-300" />
     </li>
-  )
-}
+  );
+};
 
 const getInitialWithPeriod = (str: string) => {
-  return str.charAt(0) + '.';
-}
-
+  return str.charAt(0) + ".";
+};
 
 const SidebarNavigation = () => {
-  const members = useMembersSubset()
+  const members = useMembersSubset();
 
   const createMemberNode = (member: MemberSubset) => {
-    const { firstName, lastName } = member
-    const lastInitial = lastName.charAt(0) + '.'
+    const { firstName, lastName } = member;
+    const lastInitial = lastName.charAt(0) + ".";
 
     return (
       <>
         {firstName} {lastName}
       </>
-    )
-  }
+    );
+  };
 
   return (
     <Fragment>
@@ -50,10 +49,7 @@ const SidebarNavigation = () => {
         {/* Add your Image component here */}
       </div>
       <nav className="flex flex-1 flex-col">
-        <ul 
-          role="list" 
-          className="flex flex-1 flex-col gap-y-4"
-        >
+        <ul role="list" className="flex flex-1 flex-col gap-y-4">
           <SidebarNavLink
             key="members-link"
             name="Household"

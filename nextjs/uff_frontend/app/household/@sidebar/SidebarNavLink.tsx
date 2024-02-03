@@ -1,15 +1,14 @@
-'use client'
+"use client";
 
-import clsx from "clsx"
-import type { Route } from "next"
-import Link from "next/link"
-import { usePathname } from 'next/navigation'
-import { ComponentType, ReactNode } from "react"
-
+import clsx from "clsx";
+import type { Route } from "next";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { ComponentType, ReactNode } from "react";
 
 interface SidebarNavLinkProps {
-  href: Route<string> | URL
-  name: ReactNode
+  href: Route<string> | URL;
+  name: ReactNode;
   // Icon?: ComponentType<{ className: string, 'aria-hidden': string }>
 }
 
@@ -21,20 +20,19 @@ const SidebarNavLink = ({
   const pathname = usePathname();
   const current = pathname === href.toString();
 
-
   return (
-    <Link 
-      href={href} 
+    <Link
+      href={href}
       className={clsx(
         // Styles independent of current status
-        'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold',
+        "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold",
 
         // Styles dependent on whether link is current or not
-        current 
-          ? 'bg-gray-50 text-indigo-600' 
-          : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50',
-      
-    )}>
+        current
+          ? "bg-gray-50 text-indigo-600"
+          : "text-gray-700 hover:text-indigo-600 hover:bg-gray-50",
+      )}
+    >
       {/* {Icon && (<Icon 
         aria-hidden="true"
         className={clsx(
@@ -49,7 +47,7 @@ const SidebarNavLink = ({
       />)} */}
       {name}
     </Link>
-  )
-}
+  );
+};
 
-export default SidebarNavLink
+export default SidebarNavLink;
