@@ -1,0 +1,14 @@
+[
+  {
+    "namespace": "access",
+    "object": "administration",
+    "relation": "access",
+    "subject_id": "0ff8b9b1-ef19-403a-908f-1fc7bb271b8e"
+  },
+  {
+    "namespace": "access",
+    "object": "application",
+    "relation": "access",
+    "subject_id": "0ff8b9b1-ef19-403a-908f-1fc7bb271b8e"
+  }
+]

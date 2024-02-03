@@ -1,0 +1,22 @@
+kind: Kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+
+resources:
+  - deployment.yaml
+  - service.yaml
+  - sa.yaml
+
+secretGenerator:
+  - name: keto-secret
+    envs:
+      - secrets/keto.env
+
+configMapGenerator:
+  - name: keto-config
+    files:
+      - keto.yaml=config/keto.yaml
+
+images:
+  - name: keto
+    newName: "oryd/keto"
+    newTag: "latest"

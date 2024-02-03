@@ -3,12 +3,6 @@
 [[commands]]
 package = "hello"
 
-[[commands]]
-package = "nodejs"
-
-[[commands]]
-package = "minikube"
-
 [[env]]
 name = "GO111MODULE"
 value = "on"
@@ -23,9 +17,29 @@ command = """\
   cowsay moo
   """
 
-[serviceGroups.cluster]
-description = "ZStarts Yminikube BclusterA"
-[serviceGroups.cluster.services.minikube.start]
-command = "minikube start"
-[serviceGroups.cluster.services.minikube.stop]
-command = "minikube stop"
+[[commands]]
+name = "cluster:dashboard"
+category = "cluster commands"
+help = "A web based dashboard to view the minikube cluster"
+command = """\
+minikube dashboard
+"""
+
+[[commands]]
+name = "cluster:start"
+category = "cluster commands"
+help = "starts a local minikube cluster"
+command = """\
+minikube start
+minikube addons enable ingress
+"""
+
+[[commands]]
+name = "cluster:reset"
+category = "cluster commands"
+help = "completely reset the local cluster (start fresh)"
+command = """\
+minikube stop
+minikube delete
+minikube start
+"""
