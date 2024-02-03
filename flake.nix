@@ -4,25 +4,25 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     flake-utils.url = "github:numtide/flake-utils";
+    devshell.url = "github:numtide/devshell";
+
   };
 
-  outputs = { self, nixpkgs, flake-utils }:
+  outputs = { self, nixpkgs, flake-utils, devshell }:
     flake-utils.lib.eachDefaultSystem (system:
       let
-        pkgs = nixpkgs.legacyPackages.${system};
+        pkgs = import nixpkgs {
+            inherit system;
+            overlays = [ devshell.overlays.default];
+          };
       in
       {
 
-        devShell = pkgs.mkShell {
-          buildInputs = with pkgs; [
-            yarn
-            yarn-bash-completion
-            nodejs-18_x
-            nixpkgs-fmt
-          ];
+        devShell = pkgs.devshell.mkShell {
+          imports = [ (pkgs.devshell.importTOML ./devshell.toml) ];
 
           shellHook = ''
-            PS1='[\[\033[32m\]\w]\[\033[0m\]\n\[\033[1;36m\]\u\[\033[1;33m\]-> \[\033[0m\]'
+            PS1='[\[\033[32m\]\w]\[\033[0m\]\n\[\033[1;36m\]DEV\[\033[1;33m\]-> \[\033[0m\]'
             echo 'General Consulting Dev Shell'
             alias gb='git branch'
             alias gco='git checkout'
