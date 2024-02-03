@@ -1,5 +1,5 @@
 {
-  description = "Hacker Sundae Monorepo";
+  description = "General Consulting Mono Repo";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";

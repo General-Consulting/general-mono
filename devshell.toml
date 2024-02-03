@@ -23,7 +23,9 @@ command = """\
   cowsay moo
   """
 
-[serviceGroups.minikube]
-description = "Starts minikube cluster"
-[serviceGroups.database.services.postgres]
+[serviceGroups.cluster]
+description = "ZStarts Yminikube BclusterA"
+[serviceGroups.cluster.services.minikube.start]
 command = "minikube start"
+[serviceGroups.cluster.services.minikube.stop]
+command = "minikube stop"
