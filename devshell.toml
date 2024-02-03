@@ -4,7 +4,10 @@
 package = "hello"
 
 [[commands]]
-package = "nodejs_20"
+package = "nodejs"
+
+[[commands]]
+package = "minikube"
 
 [[env]]
 name = "GO111MODULE"
@@ -20,9 +23,7 @@ command = """\
   cowsay moo
   """
 
-[serviceGroups.database]
-description = "Runs a database in the background"
+[serviceGroups.minikube]
+description = "Starts minikube cluster"
 [serviceGroups.database.services.postgres]
-command = "postgres -D ./pgdata"
-[serviceGroups.database.services.memcached]
-command = "memcached"
+command = "minikube start"

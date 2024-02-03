@@ -20,16 +20,10 @@
 
         devShell = pkgs.devshell.mkShell {
           imports = [ (pkgs.devshell.importTOML ./devshell.toml) ];
-
-          shellHook = ''
-            PS1='[\[\033[32m\]\w]\[\033[0m\]\n\[\033[1;36m\]DEV\[\033[1;33m\]-> \[\033[0m\]'
-            echo 'General Consulting Dev Shell'
-            alias gb='git branch'
-            alias gco='git checkout'
-            alias gs='git status'
-            alias pull='git pull'
-            alias push='git push'
-          '';
+          motd =  ''
+        {202}🔨 Welcome to {reset} {bold}{32}General Consulting Development{reset}{202} Environment{reset}
+        $(type -p menu &>/dev/null && menu)
+      '';
         };
 
       });
