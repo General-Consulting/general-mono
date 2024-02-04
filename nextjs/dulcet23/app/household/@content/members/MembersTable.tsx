@@ -12,10 +12,12 @@ import {
 import HighlightButton from "@/components/HighlightButton"
 import MemberFields from "./MemberFields"
 import useMembersSubset from "@/store/useMembersSubset"
-import getDefaultValues from "@utils/getDefaultValues"
+import { FieldData } from '@/types'
+import getDefaultValues from "@/utils/getDefaultValues"
 
 
-const forDevFieldsData = [
+
+const forDevFieldsData: FieldData[] = [
   {
     name: 'name.firstName',
     label: 'First Name',
