@@ -34,7 +34,7 @@ dashboard:
 
 # run nextjs locally
 devjs:
-  cd ./nextjs/uff_frontend/; \
+  cd ./nextjs/dulcet23/; \
   npm run dev
 
 # apply kustomize to minikube
