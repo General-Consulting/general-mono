@@ -12,12 +12,6 @@ const PageComponent = () => {
 
   return (
     <>
-      <h1 className="text-3xl">
-        Rendered the household/members page
-      </h1>
-      <div>
-        Add navigation
-      </div>
       <MembersTable />
     </>
   )
