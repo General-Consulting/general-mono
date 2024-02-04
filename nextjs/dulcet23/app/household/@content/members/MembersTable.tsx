@@ -63,7 +63,7 @@ const MembersTable = () => {
         onSave={() => console.log('Saved!  Haha, not really...')}
         defaultValues={defaultValues}
       >
-      hi
+        <FieldFactory fieldsData={forDevFieldsData} />
       </FormModal>
     </TableContainer>
   )
