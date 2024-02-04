@@ -92,15 +92,15 @@
     },
     "mission-control": {
       "locked": {
-        "lastModified": 1705982654,
-        "narHash": "sha256-7MvdCF0dxK8FRbBQXCC9JTuEh/7i5TAA1iU/8RNW/lI=",
-        "owner": "Platonic-Systems",
+        "lastModified": 1707002601,
+        "narHash": "sha256-2Vax7E840jBBrfpEvkM8iFc5J0iGfX8qTsGbLPHQYAQ=",
+        "owner": "General-Consulting",
         "repo": "mission-control",
-        "rev": "7aff11c21bd7b2045fdd90e6d0a1c714e96020d4",
+        "rev": "93068eddb2b85aa659e9b181e1627558b6a13d69",
         "type": "github"
       },
       "original": {
-        "owner": "Platonic-Systems",
+        "owner": "General-Consulting",
         "repo": "mission-control",
         "type": "github"
       }
@@ -123,11 +123,11 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1706683685,
-        "narHash": "sha256-FtPPshEpxH/ewBOsdKBNhlsL2MLEFv1hEnQ19f/bFsQ=",
+        "lastModified": 1706925685,
+        "narHash": "sha256-hVInjWMmgH4yZgA4ZtbgJM1qEAel72SYhP5nOWX4UIM=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "5ad9903c16126a7d949101687af0aa589b1d7d3d",
+        "rev": "79a13f1437e149dc7be2d1290c74d378dad60814",
         "type": "github"
       },
       "original": {

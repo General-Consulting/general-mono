@@ -5,7 +5,7 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     flake-utils.url = "github:numtide/flake-utils";
     devshell.url = "github:numtide/devshell";
-    mission-control.url = "github:Platonic-Systems/mission-control";
+    mission-control.url = "github:General-Consulting/mission-control";
     flake-root.url = "github:srid/flake-root";
 
     flake-parts = {
@@ -44,8 +44,29 @@
         mission-control.scripts = {
           fmt = {
             description = "format the whole repo";
-            exec = "${lib.getExe' pkgs.just "just"} fmt";
+            exec = "just fmt";
           };
+
+          ks = {
+            description = "start minikube cluster";
+            exec = "just cluster";
+          };
+
+          npd = {
+            description = "NextJS PDF Dev";
+            exec = "just devjs";
+          };
+
+          kd = {
+            description = "A Dashboard for the minikube cluster";
+            exec = "just dashboard";
+          };
+
+          ka = {
+            description = "Apply the kubernetes manifests";
+            exec = "just k8sapply";
+          };
+
         };
 
         devShells.default = pkgs.mkShell {
@@ -55,6 +76,7 @@
             minikube
             nodejs
             yarn
+            kustomize
           ];
 
           inputsFrom = [

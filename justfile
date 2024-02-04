@@ -36,3 +36,8 @@ dashboard:
 devjs:
   cd ./nextjs/uff_frontend/; \
   npm run dev
+
+# apply kustomize to minikube
+k8sapply:
+  cd ./k8s; ./build.sh| kubectl apply -f -
+
