@@ -94,4 +94,12 @@ export type AssetSubset = WithId<Asset, 'assetType'>;
 // Any of the above subsets can be used in the table that displays data
 export type TableData = MemberSubset[] | IncomeSubset[] | AssetSubset[]
 
-// export type TableItem = MemberSubset | IncomeSubset | AssetSubset
+/* For FieldFactory component, which depends on 
+ * data from DB.
+ */
+
+export interface FieldData {
+  name: string;
+  label: string;
+  component: 'Input' | 'Checkbox' | 'Radio'; // Add more types as needed
+}
