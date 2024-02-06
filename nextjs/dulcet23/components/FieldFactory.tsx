@@ -1,17 +1,21 @@
 import { ReactNode } from "react";
 
-import { standardComponentStructures } from "@/constants/standardComponentStructures";
+import { compoundStructures } from "@/constants/compoundStructures";
 import { FieldSpec } from "@/types";
 import { getComponentFromField } from "@/utils/getComponentFromField";
 
-type FieldFactoryProps = (fieldData: FieldSpec) => ReactNode
+type FieldFactoryProps = { 
+  fieldData: FieldSpec
+}
 
-const fieldFactory: FieldFactoryProps = (fieldData) => {
+const FieldFactory = ({
+  fieldData
+}: FieldFactoryProps) => {
   return Object.entries(fieldData).map(([key, value]) => {
     // Check if the field is a compound field with a predefined structure
-    if (value.field in standardComponentStructures) {
-      // standardComponentStructures is for, e.g., Address. return {} as default to avoid type errors 
-      const components = standardComponentStructures[value.field as keyof typeof standardComponentStructures] || {};
+    if (value.field in compoundStructures) {
+      // compoundStructures is for, e.g., Address. return {} as default to avoid type errors 
+      const components = compoundStructures[value.field as keyof typeof compoundStructures] || {};
       // Use the predefined components for this compound field
       return (
         <fieldset key={key}>
@@ -29,3 +33,5 @@ const fieldFactory: FieldFactoryProps = (fieldData) => {
     }
   });
 };
+
+export default FieldFactory

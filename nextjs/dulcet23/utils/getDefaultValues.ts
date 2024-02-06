@@ -1,4 +1,5 @@
 import { 
+  Compound,
   Field,
   FieldSpec,
   // RecordWithId - TODO - decide if this makes sense as a return type
@@ -8,18 +9,18 @@ import {
 type GetDefaultValues = (fieldData: FieldSpec) => Record<string, unknown>
 
 const getDefaultValues: GetDefaultValues = (fieldData) => {
-  const defaultValues = {};
+  // Define 'defaultValues' with an index signature
+  const defaultValues: Record<string, any> = {}; // 'any' allows for both string and object values
   for (const [key, value] of Object.entries(fieldData)) {
-    if (value.field === Field.Person || value.field === Field.Address) {
+    // TODO - Can I check that value.i
+    if (value.field in Compound) {
       defaultValues[key] = {};
-      Object.keys(value.components).forEach(componentKey => {
-        defaultValues[key][componentKey] = ""; // Set default to empty string
-      });
+      // Object.keys(value.components).forEach(componentKey => {
+      //   defaultValues[key][componentKey] = ""; // TypeScript understands 'defaultValues[key]' as an object here
+      // });
     } else {
-      defaultValues[key] = ""; // Simple fields default to empty string
+      defaultValues[key] = ""; // Simple fields default to an empty string
     }
   }
   return defaultValues;
 }
-
-export default getDefaultValues

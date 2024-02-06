@@ -5,16 +5,19 @@
 
 export enum Field {
   Id = 'FieldId',
-  Address = 'Address',
   Checkbox = 'Checkbox',
-  DateInput = 'DateInput', // Format: YYYY-MM-DD for PostgreSQL optimization
-  Person = 'Person',
+  DateInput = 'DateInput',
   PhoneInput = 'PhoneInput',
   Select = 'Select',
   SSN = 'SSN',
   Radio = 'Radio',
   TextInput = 'TextInput',
   Zip = 'Zip'
+}
+
+export enum Compound {
+  Address = 'Address',
+  Person = 'Person'
 }
 
 type BaseField = {
@@ -32,18 +35,17 @@ type OptionsField = BaseField & {
   options: string[];
 };
 
-type CompoundField = BaseField & {
-  field: Field.Person | Field.Address;
-  components?: { [key: string]: Omit<BaseField, 'field'> & { field: Field } };
+type SimpleField = BaseField & {
+  field: Field;
 };
 
-// Ensure to exclude any new compound fields from SimpleField
-type SimpleField = BaseField & {
-  field: Exclude<Field, Field.Id | Field.Radio | Field.Checkbox | Field.Person | Field.Address | Field.Select>;
+type CompoundField = BaseField & {
+  field: Compound;
+  components?: { [key: string]: SimpleField }; // Assuming compound fields contain simple fields
 };
 
 // Union type for all field variations
-export type FieldVariant = FieldWithId | OptionsField | CompoundField | SimpleField;
+export type FieldVariant = CompoundField | SimpleField;
 
 // Utility type to enforce the `id` field requirement
 type EnforceIdField<T> = T & {
@@ -66,8 +68,8 @@ export type RecordWithId = Record<string, unknown> & {
 
 // This type maps from Field enum values to a structure representing the 
 // components of that field, such as in a compound field like Address.
-export type ComponentStructure = {
-  [K in Field]?: { [key: string]: Omit<FieldVariant, 'field'> & { field: Field } };
+export type CompoundStructure = {
+  [K in Compound]?: { [key: string]: SimpleField };
 };
 
 

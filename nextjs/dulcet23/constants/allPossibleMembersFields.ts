@@ -1,12 +1,13 @@
 import {
+  Compound,
   Field, 
   FieldSpec 
 } from "@/types"
 
 
-const allPossibleMemberFields: FieldSpec = {
+export const allPossibleMemberFields: FieldSpec = {
   id: { field: Field.Id },
-  name: { field: Field.Person },
+  name: { field: Compound.Person },
   dob: { 
     field: Field.DateInput, 
     label: "Date of Birth",

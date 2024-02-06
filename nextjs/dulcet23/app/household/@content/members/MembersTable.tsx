@@ -12,23 +12,9 @@ import {
 import HighlightButton from "@/components/HighlightButton"
 import MemberFields from "./MemberFields"
 import useMembersSubset from "@/store/useMembersSubset"
-import { FieldData } from '@/types'
-import getDefaultValues from "@/utils/getDefaultValues"
 
+import { allPossibleMemberFields } from "@/constants/allPossibleMembersFields"
 
-
-const forDevFieldsData: FieldData[] = [
-  {
-    name: 'name.firstName',
-    label: 'First Name',
-    component: 'Input' 
-  },
-  {
-    name: 'name.lastName',
-    label: 'Last Name',
-    component: 'Input' 
-  }
-]
 
 const MembersTable = () => {
   const [ openModal, setOpenModal ] = useState('')
@@ -39,6 +25,8 @@ const MembersTable = () => {
   // TODO - call getDefaultValues after getting 
 
   console.log('membersSubset', membersSubset)
+
+  const defaultValues = {name: { first: "", last: ""}}
 
   return (
     <TableContainer>
@@ -65,7 +53,7 @@ const MembersTable = () => {
         onSave={() => console.log('Saved!  Haha, not really...')}
         defaultValues={defaultValues}
       >
-        <FieldFactory fieldsData={forDevFieldsData} />
+        <FieldFactory fieldData={allPossibleMemberFields} />
       </FormModal>
     </TableContainer>
   )

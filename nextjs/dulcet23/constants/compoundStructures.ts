@@ -1,10 +1,11 @@
 import { 
-  ComponentStructure,
+  CompoundStructure,
+  Compound,
   Field 
 } from "@/types"
 
-export const standardComponentStructures: ComponentStructure = {
-  [Field.Address]: {
+export const compoundStructures: CompoundStructure = {
+  [Compound.Address]: {
     street: { field: Field.TextInput, label: "Street" },
     city: { field: Field.TextInput, label: "City" },
     state: { field: Field.TextInput },
