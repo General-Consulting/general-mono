@@ -37,6 +37,10 @@ const FormModal = <TFormValues extends FieldValues>({
     defaultValues: defaultValues as DefaultValues<TFormValues> 
   })
 
+
+  const watchAllFields = methods.watch()
+  console.log('watchAllFields', watchAllFields)
+
   const handleSave = () => onSave()
   const handleCancel = () => onCancel() 
 

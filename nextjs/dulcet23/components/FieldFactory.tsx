@@ -1,47 +1,31 @@
-"use client"
+import { ReactNode } from "react";
 
-import { FC } from "react"
+import { standardComponentStructures } from "@/constants/standardComponentStructures";
+import { FieldSpec } from "@/types";
+import { getComponentFromField } from "@/utils/getComponentFromField";
 
-import Checkbox from "./Checkbox";
-import Input from "./Input";
-import Radio from "./Radio";
-import { FieldData } from "@/types"
+type FieldFactoryProps = (fieldData: FieldSpec) => ReactNode
 
-
-const componentMapping: { [key: string]: React.ElementType } = {
-  Input: Input,
-  Checkbox: Checkbox,
-  Radio: Radio,
-};
-
-interface FieldFactoryProps {
-  fieldsData: FieldData[]
-  // component: 'Input' | 'Checkbox' | 'Radio',
-  // label: string,
-  // onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void,
-}
-
-const FieldFactory: FC<FieldFactoryProps> = ({ 
-  fieldsData 
-}) => {
-  // Map over fieldsData to create array of field components, e.g. Input, Radio, etc.
-  const fields = fieldsData.map((fieldData, index) => {
-    const { component, name, ...props } = fieldData;
-    const FieldComponent = componentMapping[component];
-    if (!FieldComponent) {
-      throw new Error(`Unknown component type: ${component}`);
+const fieldFactory: FieldFactoryProps = (fieldData) => {
+  return Object.entries(fieldData).map(([key, value]) => {
+    // Check if the field is a compound field with a predefined structure
+    if (value.field in standardComponentStructures) {
+      // standardComponentStructures is for, e.g., Address. return {} as default to avoid type errors 
+      const components = standardComponentStructures[value.field as keyof typeof standardComponentStructures] || {};
+      // Use the predefined components for this compound field
+      return (
+        <fieldset key={key}>
+          <legend>{value.label}</legend>
+          {Object.entries(components).map(([componentKey, componentValue]) => {
+            const [Component, props] = getComponentFromField(componentKey, componentValue);
+            return <Component key={componentKey} name={`${key}.${componentKey}`} {...props} />;
+          })}
+        </fieldset>
+      );
+    } else {
+      // Handle simple fields or custom compound fields
+      const [Component, props] = getComponentFromField(key, value);
+      return <Component key={key} name={key} {...props} />;
     }
-    return (
-    <FieldComponent 
-      key={`${name}-${index}`}
-      name={name} 
-      {...props} 
-      />
-    );
-  })
-
-    // Render the array of elements
-    return <>{fields}</>;
-}
-
-export default FieldFactory
+  });
+};

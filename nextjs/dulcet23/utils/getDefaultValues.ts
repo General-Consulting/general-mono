@@ -1,16 +1,25 @@
-import { FieldData } from '@/types'
+import { 
+  Field,
+  FieldSpec,
+  // RecordWithId - TODO - decide if this makes sense as a return type
+} from "@/types"
 
-/* generateDefaultValues function definition
- * Accepts fieldsData, which should likely be pulled from DB
- * Returns object where each field name is associated with an '' or []
- * For use in making `defaultValues` required by react-hook-form's useForm()
- */
-const getDefaultValues = (fieldsData: FieldData[]): { [key: string]: string | string[] } => {
-  return fieldsData.reduce((acc, field) => {
-    // Assign an empty string or an empty array as the default value based on the component type
-    acc[field.name] = field.component === 'Checkbox' ? [] : '';
-    return acc;
-  }, {} as { [key: string]: string | any[] });
-};
+// TODO - Should this type return RecordWithId
+type GetDefaultValues = (fieldData: FieldSpec) => Record<string, unknown>
+
+const getDefaultValues: GetDefaultValues = (fieldData) => {
+  const defaultValues = {};
+  for (const [key, value] of Object.entries(fieldData)) {
+    if (value.field === Field.Person || value.field === Field.Address) {
+      defaultValues[key] = {};
+      Object.keys(value.components).forEach(componentKey => {
+        defaultValues[key][componentKey] = ""; // Set default to empty string
+      });
+    } else {
+      defaultValues[key] = ""; // Simple fields default to empty string
+    }
+  }
+  return defaultValues;
+}
 
 export default getDefaultValues

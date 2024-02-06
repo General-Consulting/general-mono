@@ -34,7 +34,9 @@ const MembersTable = () => {
   const [ openModal, setOpenModal ] = useState('')
   const membersSubset = useMembersSubset()
 
-  const defaultValues = getDefaultValues(forDevFieldsData)
+  // 1 - TODO - parse fields to get 
+  // 2 - TODO - filter fields to get required member fields 
+  // TODO - call getDefaultValues after getting 
 
   console.log('membersSubset', membersSubset)
 

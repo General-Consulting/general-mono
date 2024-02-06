@@ -1,6 +1,82 @@
+// IMPORTANT: When adding new fields to the Field enum, ensure to 
+// properly categorize them below and adjust the Exclude in SimpleField 
+// and other relevant types to maintain exclusivity.
+
+
+export enum Field {
+  Id = 'FieldId',
+  Address = 'Address',
+  Checkbox = 'Checkbox',
+  DateInput = 'DateInput', // Format: YYYY-MM-DD for PostgreSQL optimization
+  Person = 'Person',
+  PhoneInput = 'PhoneInput',
+  Select = 'Select',
+  SSN = 'SSN',
+  Radio = 'Radio',
+  TextInput = 'TextInput',
+  Zip = 'Zip'
+}
+
+type BaseField = {
+  alwaysInclude?: boolean,
+  label?: string,
+  disabled?: () => void,
+}
+
+type FieldWithId = BaseField & {
+  field: Field.Id
+}
+
+type OptionsField = BaseField & {
+  field: Field.Radio | Field.Checkbox | Field.Select;
+  options: string[];
+};
+
+type CompoundField = BaseField & {
+  field: Field.Person | Field.Address;
+  components?: { [key: string]: Omit<BaseField, 'field'> & { field: Field } };
+};
+
+// Ensure to exclude any new compound fields from SimpleField
+type SimpleField = BaseField & {
+  field: Exclude<Field, Field.Id | Field.Radio | Field.Checkbox | Field.Person | Field.Address | Field.Select>;
+};
+
+// Union type for all field variations
+export type FieldVariant = FieldWithId | OptionsField | CompoundField | SimpleField;
+
+// Utility type to enforce the `id` field requirement
+type EnforceIdField<T> = T & {
+  id: FieldWithId;
+};
+
+// The final FieldSpec type
+export type FieldSpec = EnforceIdField<{
+  [K in string]: FieldVariant;
+}>;
+
+
+/*
+ * Types with more widespread usage
+ */ 
+
+export type RecordWithId = Record<string, unknown> & {
+  id: string;
+};
+
+// This type maps from Field enum values to a structure representing the 
+// components of that field, such as in a compound field like Address.
+export type ComponentStructure = {
+  [K in Field]?: { [key: string]: Omit<FieldVariant, 'field'> & { field: Field } };
+};
+
+
+
+
+
 export interface PersonName {
   firstName: string;
-  middleName: string;
+  middleName?: string;
   lastName: string;
   maidenName?:string;
 }
@@ -36,6 +112,21 @@ export interface Member {
   ssn: string; 
   income?: Income[];
   assets?: Asset[];
+}
+
+
+export interface PersonName {
+  firstName: string;
+  middleName?: string;
+  lastName: string;
+  maidenName?:string;
+}
+
+export interface Address {
+  street: string;
+  city: string;
+  state: string;
+  zipCode: string;
 }
 
 // The main structure
@@ -93,13 +184,3 @@ export type AssetSubset = WithId<Asset, 'assetType'>;
 
 // Any of the above subsets can be used in the table that displays data
 export type TableData = MemberSubset[] | IncomeSubset[] | AssetSubset[]
-
-/* For FieldFactory component, which depends on 
- * data from DB.
- */
-
-export interface FieldData {
-  name: string;
-  label: string;
-  component: 'Input' | 'Checkbox' | 'Radio'; // Add more types as needed
-}
