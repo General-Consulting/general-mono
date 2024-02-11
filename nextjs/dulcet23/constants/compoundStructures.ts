@@ -6,11 +6,18 @@ import {
 
 export const compoundStructures: CompoundStructure = {
   [Compound.Address]: {
-    street: { field: Field.TextInput, label: "Street" },
-    city: { field: Field.TextInput, label: "City" },
+    street: { field: Field.TextInput },
+    city: { field: Field.TextInput },
     state: { field: Field.TextInput },
     // state: { field: Field.Select, label: "State", options: ["State1", "State2"] }, // Add more states as needed
     zipCode: { field: Field.Zip, label: "Zip Code" }
   },
   // Define other standard structures here if needed
+
+  [Compound.Person]: {
+    first: { field: Field.TextInput },
+    middle: { field: Field.TextInput },
+    last: { field: Field.TextInput },
+    maiden: { field: Field.TextInput },
+  }
 };
