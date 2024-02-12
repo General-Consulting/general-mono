@@ -1,7 +1,11 @@
 'use client'
 
-const Default = () => {
-  return 'uggh'
+import MembersTable from "./MembersTable"
+
+const DefaultPage = () => {
+  return (
+    <MembersTable />
+  )
 }
 
-export default Default
+export default DefaultPage

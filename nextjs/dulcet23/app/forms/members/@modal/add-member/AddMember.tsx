@@ -10,26 +10,36 @@ import HighlightButton from '@/components/HighlightButton';
 
 
 interface AddMemberProps {
-  children: ReactNode
+  onCancel: () => void;
 }
 
-const AddMember = () => {
+const AddMember = ({
+  onCancel
+}: AddMemberProps) => {
 
   console.log('In the addMember component')
   const router = useRouter();
 
-  const handleCancel = () => router.back()
+  const handleCancel = () => onCancel()
   const handleSave = () => console.log('Saved!')
 
   return (
     <>
   
-      <DefaultButton onClick={handleCancel}>
-        Cancel
-      </DefaultButton>
-      <HighlightButton onClick={handleSave}>
-        Save
-      </HighlightButton>
+      <div className="sm:flex sm:justify-between">
+        <DefaultButton
+          onClick={handleCancel}
+          className="w-full sm:w-24"
+        >
+          Cancel
+        </DefaultButton>
+        <HighlightButton
+          onClick={handleSave}
+          className="w-full sm:w-24"
+        >
+          Save
+        </HighlightButton>
+      </div>
     </>
   );
 }
