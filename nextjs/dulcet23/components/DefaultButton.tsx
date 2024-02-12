@@ -12,7 +12,7 @@ import { ReactNode } from "react";
 
 interface DefaultButtonProps {
   onClick: () => void;
-  className: string
+  className?: string
   children: ReactNode
 }
 
