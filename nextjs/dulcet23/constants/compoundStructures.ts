@@ -12,7 +12,6 @@ export const compoundStructures: CompoundStructure = {
     // state: { field: Field.Select, label: "State", options: ["State1", "State2"] }, // Add more states as needed
     zipCode: { field: Field.Zip, label: "Zip Code" }
   },
-  // Define other standard structures here if needed
 
   [Compound.Person]: {
     first: { field: Field.TextInput },
@@ -20,4 +19,6 @@ export const compoundStructures: CompoundStructure = {
     last: { field: Field.TextInput },
     maiden: { field: Field.TextInput },
   }
+
+  // Define other standard structures here if needed
 };

@@ -10,19 +10,30 @@ import {
   Table,
 } from "@/components/Table"
 import HighlightButton from "@/components/HighlightButton"
-import MemberFields from "./MemberFields"
 import useMembersSubset from "@/store/useMembersSubset"
 
 import { allPossibleMemberFields } from "@/constants/allPossibleMembersFields"
+import { useHouseholdStore } from "@/store/useHouseholdStore"
 
 
 const MembersTable = () => {
   const [ openModal, setOpenModal ] = useState('')
   const membersSubset = useMembersSubset()
+  const { addMember, updateMember, deleteMember } = useHouseholdStore()
 
   // 1 - TODO - parse fields to get 
   // 2 - TODO - filter fields to get required member fields 
   // TODO - call getDefaultValues after getting 
+
+
+  /*
+   * Manipulate modal
+   */
+  
+  // handleCancel function - just close form modal without saving??
+  const handleCancel = () => {
+    setOpenModal("")
+  }
 
   console.log('membersSubset', membersSubset)
 
@@ -49,7 +60,7 @@ const MembersTable = () => {
       <FormModal
         title="Edit member"
         isOpen={true}
-        onCancel={() => console.log('Cancelled!')}
+        onCancel={handleCancel}
         onSave={() => console.log('Saved!  Haha, not really...')}
         defaultValues={defaultValues}
       >

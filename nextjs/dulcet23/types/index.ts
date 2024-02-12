@@ -30,7 +30,7 @@ type FieldWithId = BaseField & {
   field: Field.Id
 }
 
-type OptionsField = BaseField & {
+export type OptionsField = BaseField & {
   field: Field.Radio | Field.Checkbox | Field.Select;
   options: string[];
 };
