@@ -8,9 +8,7 @@ import Modal from '@/components/Modal';
 const Page = () => {
   const router = useRouter()
   
-  const handleCancel = () => {
-    router.push('/forms/members')
-  }
+  const handleCancel = () => router.push('/forms/members')
 
   return (
     <Modal 

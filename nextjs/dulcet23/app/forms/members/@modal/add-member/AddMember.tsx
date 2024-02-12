@@ -1,12 +1,12 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useState, useEffect, ReactNode } from 'react';
+import { useForm, FormProvider, useFormContext } from "react-hook-form"
 
 import DefaultButton from '@/components/DefaultButton';
+import FieldFactory from '@/components/FieldFactory';
 import HighlightButton from '@/components/HighlightButton';
-
-{/* <FieldFactory fieldData={allPossibleMemberFields} /> */}
+import { allPossibleMemberFields } from '@/constants/allPossibleMembersFields'
 
 
 interface AddMemberProps {
@@ -16,31 +16,35 @@ interface AddMemberProps {
 const AddMember = ({
   onCancel
 }: AddMemberProps) => {
+  // TODO - getDefaultValues
+  const methods = useForm()
 
   console.log('In the addMember component')
-  const router = useRouter();
+
 
   const handleCancel = () => onCancel()
   const handleSave = () => console.log('Saved!')
 
   return (
-    <>
-  
-      <div className="sm:flex sm:justify-between">
-        <DefaultButton
-          onClick={handleCancel}
-          className="w-full sm:w-24"
-        >
-          Cancel
-        </DefaultButton>
-        <HighlightButton
-          onClick={handleSave}
-          className="w-full sm:w-24"
-        >
-          Save
-        </HighlightButton>
-      </div>
-    </>
+    <FormProvider {...methods}>
+      <form>
+        <FieldFactory fieldData={allPossibleMemberFields} />
+        <div className="sm:flex sm:justify-between">
+          <DefaultButton
+            onClick={handleCancel}
+            className="w-full sm:w-24"
+          >
+            Cancel
+          </DefaultButton>
+          <HighlightButton
+            onClick={handleSave}
+            className="w-full sm:w-24"
+          >
+            Save
+          </HighlightButton>
+        </div>
+      </form>
+    </FormProvider>
   );
 }
 
