@@ -6,6 +6,7 @@ import { useForm, FormProvider, useFormContext } from "react-hook-form"
 import DefaultButton from '@/components/DefaultButton';
 import FieldFactory from '@/components/FieldFactory';
 import HighlightButton from '@/components/HighlightButton';
+import { ModalDivider } from '@/components/Modal'
 import { allPossibleMemberFields } from '@/constants/allPossibleMembersFields'
 
 
@@ -29,6 +30,7 @@ const AddMember = ({
     <FormProvider {...methods}>
       <form>
         <FieldFactory fieldData={allPossibleMemberFields} />
+        <ModalDivider />
         <div className="sm:flex sm:justify-between">
           <DefaultButton
             onClick={handleCancel}

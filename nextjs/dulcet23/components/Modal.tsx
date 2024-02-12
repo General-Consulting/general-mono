@@ -5,6 +5,12 @@ import { PencilIcon } from '@heroicons/react/24/outline'
 import { Fragment, ReactNode } from 'react'
 import { usePathname } from 'next/navigation'
 
+export const ModalDivider = () => {
+  return (
+    <hr className="h-px mt-4 sm:mt-6 mb-4 sm:mb-10 bg-gray-200 border-0 dark:bg-gray-700" />
+  )
+}
+
 interface ModalProps {
   title: string;
   onCancel: () => void;
@@ -12,7 +18,6 @@ interface ModalProps {
   modalPath: string;
   showEditIcon?: boolean;
 }
-
 
 const Modal = ({
   children,
@@ -67,12 +72,12 @@ const Modal = ({
                     <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
                       {title}
                     </Dialog.Title>
+                    <ModalDivider />
                     <div className="mt-2">                      
                       {children}
                     </div>
                   </div>
                 </div>
-                <hr className="h-px mt-4 sm:mt-6 mb-4 sm:mb-10 bg-gray-200 border-0 dark:bg-gray-700" />
               </Dialog.Panel>
             </Transition.Child>
           </div>
