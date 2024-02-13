@@ -48,14 +48,18 @@ type CompoundField = BaseField & {
 export type FieldVariant = CompoundField | SimpleField;
 
 // Utility type to enforce the `id` field requirement
-type EnforceIdField<T> = T & {
-  id: FieldWithId;
-};
+// type EnforceIdField<T> = T & {
+//   id: FieldWithId;
+// };
 
-// The final FieldSpec type
-export type FieldSpec = EnforceIdField<{
+// // The final FieldSpec type
+// export type FieldSpec = EnforceIdField<{
+//   [K in string]: FieldVariant;
+// }>;
+
+export type FieldSpec = {
   [K in string]: FieldVariant;
-}>;
+};
 
 
 /*

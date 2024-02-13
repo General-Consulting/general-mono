@@ -6,7 +6,7 @@ import {
 
 
 export const allPossibleMemberFields: FieldSpec = {
-  id: { field: Field.Id },
+  // id: { field: Field.Id },
   name: { field: Compound.Person },
   dob: { 
     field: Field.DateInput, 
