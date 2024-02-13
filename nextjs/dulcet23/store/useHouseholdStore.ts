@@ -16,11 +16,21 @@ import { testMember1, testMember2 } from "./forDevOnly"
 
 
 
-
-
-
-export const useHouseholdStore = create<HouseholdState>((set) => ({
+export const useHouseholdStore = create<HouseholdState>((set, get) => ({
   household: { members: [ testMember1, testMember2 ] }, // Initial state
+
+  // Use the get method to get a member's first and last name by ID
+  getMemberById: (memberId: string) => {
+    const member = get().household.members.find(member => member.id === memberId);
+    if (member) {
+      // Assuming your Member type has a nested structure for names like { name: { first: '', last: '' } }
+      // Adjust according to your actual data structure
+      return { firstName: member.name.first, lastName: member.name.last };
+    } else {
+      // Member not found, return null or an appropriate response
+      return null;
+    }
+  },
 
   // Add member function
   addMember: (newMemberData: Member) => set((state) => {

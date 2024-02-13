@@ -198,9 +198,8 @@ export const TableBody = ({
   onEdit,
   onDelete
 }: TableBodyProps) => {
-  const handleEdit = () => onEdit()
-  const handleDelete = () => onDelete()
 
+  // If no table data, render empty table
   if (tableData.length === 0) return (
     <tbody>
       <tr key={`empty-table-body`}>
@@ -210,6 +209,9 @@ export const TableBody = ({
       </tr>
     </tbody>
   )
+
+  // const handleEdit = () => onEdit()
+  const handleDelete = () => onDelete()
 
   return (
     <tbody className="divide-y divide-gray-200">
@@ -237,7 +239,7 @@ export const TableBody = ({
 
             {/* Always display Edit button and Delete button */}
             <td className="text-center w-16 align-text-bottom">
-              <EditButton onClick={onEdit} />
+              <EditButton onClick={() => onEdit()} />
             </td>
             <td className="text-center w-16 pt-1 align-text-bottom">
               <DeleteButton onClick={onDelete} />

@@ -16,7 +16,15 @@ const MembersTable = () => {
 
   console.log('In MembersTable and membersSubset is', membersSubset)
 
+  // If user clicks "Add Member" button
   const handleAddMember = () => router.push('/forms/members/add-member')
+
+  // If user clicks "Edit" pencil icon
+  const handleEdit = () => {
+    // const editPath = `forms/members/edit-member/${memberId}`
+    // router.push(editPath)
+    console.log('blash')
+  }
 
   return (
     <TableContainer>
@@ -26,7 +34,7 @@ const MembersTable = () => {
       />
       <Table
         tableData={membersSubset}
-        onEdit={() => console.log('Edit!')}
+        onEdit={handleEdit}
         onDelete={() => console.log('Delete!')}
       />
       <HighlightButton

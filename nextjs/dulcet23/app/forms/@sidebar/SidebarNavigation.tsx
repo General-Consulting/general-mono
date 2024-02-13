@@ -57,7 +57,7 @@ const SidebarNavigation = () => {
           <SidebarNavLink
             key="members-link"
             name="Household"
-            href="/household/members"
+            href="/forms/members"
             // Icon={HomeIcon}
           />
 
@@ -67,7 +67,7 @@ const SidebarNavigation = () => {
             <SidebarNavLink
               key={`member-${index}`}
               name={createMemberNode(member)}
-              href={`/household/member/${member.id}`}
+              href={`/forms/member/${member.id}`}
               // Icon={UserIcon}
             />
           ))}

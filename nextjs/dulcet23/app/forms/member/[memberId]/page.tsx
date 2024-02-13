@@ -12,13 +12,13 @@ interface PageComponentProps {
 //   params 
 // }: PageComponentProps) => {
 const PageComponent = () => {
-  const { id } = useParams<{id: string }>();
+  const { memberId } = useParams<{memberId: string }>();
 
   return (
     <>
       <CollectionTable 
         collectionName="income"
-        memberId={id}
+        memberId={memberId}
       />
 
     </>
