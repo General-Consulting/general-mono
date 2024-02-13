@@ -1,7 +1,10 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useForm, FormProvider } from "react-hook-form"
+import { useForm, FormProvider } from 'react-hook-form'
+import { useEffect } from 'react';
+import { v4 as uuidv4 } from "uuid"
+
 
 import DefaultButton from '@/components/DefaultButton';
 import FieldFactory from '@/components/FieldFactory';
@@ -21,21 +24,29 @@ const AddMember = ({
   const router = useRouter()
   // TODO - getDefaultValues
   const methods = useForm()
+  const { handleSubmit, register, setValue } = methods
   const { addMember } = useHouseholdStore()
   
-
+  // Add member to store
   const onSubmit = (data: any) => {
-    console.log('Inside onSubmit and data is', data)
     addMember(data)
     router.push('/forms/members')
   }
 
+  // Close modal
   const handleCancel = () => onCancel()
+
+  // Register `id` virutally & set value with uuid
+  useEffect(() => {
+    const newID = uuidv4()
+    register('id', { required: true })
+    setValue('id', newID)
+  }, [register, setValue])
 
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={methods.handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <FieldFactory fieldData={allPossibleMemberFields} />
         <ModalDivider />
         <div className="sm:flex sm:justify-between">
