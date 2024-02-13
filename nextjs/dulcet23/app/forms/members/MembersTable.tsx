@@ -20,7 +20,7 @@ const MembersTable = () => {
   const handleAddMember = () => router.push('/forms/members/add-member')
 
   // If user clicks "Edit" pencil icon
-  const handleEdit = () => {
+  const createEditLink = (id: string) => {
     // const editPath = `forms/members/edit-member/${memberId}`
     // router.push(editPath)
     console.log('blash')

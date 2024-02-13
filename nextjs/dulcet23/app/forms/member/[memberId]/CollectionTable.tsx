@@ -2,18 +2,16 @@
 
 import { useState } from "react"
 
-
-import FormModal from "@/components/FormModal"
 import { 
   TableContainer,
   TableTitle,
   Table,
 } from "@/components/Table"
 import HighlightButton from "@/components/HighlightButton"
-import useTransformedCollection from "@/store/useCollectionSubset"
-import { Collection } from "@/types"
 import useCollectionSubset from "@/store/useCollectionSubset"
+import LinkGenerator from "@/utils/LinkGenerator"
 
+import { Collection } from "@/types"
 
 
 interface CollectionTableProps {
@@ -30,10 +28,8 @@ const CollectionTable = ({
 
   const collectionSubset = useCollectionSubset({ memberId, collectionName })
 
-  console.log('In CollectionTable...')
-  console.log('collectionName', collectionName)
-  console.log('memberId', memberId)
-  console.log('collectionSubset', collectionSubset)
+
+  const linkGenerator = new LinkGenerator()
   
 
   return (
@@ -44,8 +40,8 @@ const CollectionTable = ({
       />
       <Table
         tableData={collectionSubset}
-        onEdit={() => console.log('Edit!')}
-        onDelete={() => console.log('Delete!')}
+        linkGenerator={() => console.log('Edit!')}
+
       />
       <HighlightButton
         onClick={() => {
