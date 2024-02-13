@@ -1,17 +1,19 @@
 'use client'
 
 import { clsx } from 'clsx'
+import { useRouter } from 'next/navigation'
 import { ReactNode } from 'react'
 
 import EditButton from './EditButton'
 import DeleteButton from './DeleteButton'
+import CollectionLinkGenerator from '@/utils/CollectionLinkGenerator'
+import MemberLinkGenerator from '@/utils/MemberLinkGenerator'
 
 import { TableData } from '@/types'
 
-
 /* getStyleByColumnIndex function
- * Used by TableHead and TableBody to hide middle columns on small screens.
- * Takes in an `index` and returns a Tailwind utility class.
+ * - Used by TableHead and TableBody to hide middle columns on small screens.
+ * - Takes in an `index` and returns a Tailwind utility class.
  */
 
 const getStyleByColumnIndex = (index: number): string => {
@@ -25,19 +27,6 @@ const getStyleByColumnIndex = (index: number): string => {
   } 
 }
 
-
-/* Item type
- * - Basic type used for rendering itemsArray
- * - itemsArray will be a shortened/edited version of members, income, etc.
- * - IMPORTANT - all items must have an `id` key
- */
-interface ItemBase {
-  id: string;
-}
-
-interface Item extends ItemBase {
-  [key: string]: string | number | ItemBase;
-}
 /* TableContainer component
  * - Just for padding
  */
@@ -53,7 +42,7 @@ export const TableContainer = ({ children }: TableContainerProps) => {
   )
 }
 
-/* TableContainer component
+/* TableTitle component
  * - Displays title & description
  * - Not actually part of the HTML <table>
  */
@@ -189,15 +178,14 @@ export const TableHead = ({ tableData }: TableHeadProps) => {
  */
 interface TableBodyProps {
   tableData: TableData;
-  onEdit: () => void;
-  onDelete: () => void;
+  linkGenerator: CollectionLinkGenerator | MemberLinkGenerator
 }
 
 export const TableBody = ({ 
   tableData,
-  onEdit,
-  onDelete
+  linkGenerator
 }: TableBodyProps) => {
+  const router = useRouter()
 
   // If no table data, render empty table
   if (tableData.length === 0) return (
@@ -210,8 +198,17 @@ export const TableBody = ({
     </tbody>
   )
 
-  // const handleEdit = () => onEdit()
-  const handleDelete = () => onDelete()
+  // Open delete modal when user clicks delete button in table
+  const handleDelete = (id: string) => {
+    const deleteLink = linkGenerator.createDeleteLink(id)
+    router.push(deleteLink)
+  }
+
+  // Open edit modal when user clicks edit button in table
+  const handleEdit = (id: string) => {
+    const editLink = linkGenerator.createEditLink(id)
+    router.push(editLink)
+  }
 
   return (
     <tbody className="divide-y divide-gray-200">
@@ -239,10 +236,10 @@ export const TableBody = ({
 
             {/* Always display Edit button and Delete button */}
             <td className="text-center w-16 align-text-bottom">
-              <EditButton onClick={() => onEdit()} />
+              <EditButton onClick={() => handleEdit(id)} />
             </td>
             <td className="text-center w-16 pt-1 align-text-bottom">
-              <DeleteButton onClick={onDelete} />
+              <DeleteButton onClick={() => handleDelete(id)} />
             </td>
           </tr>
         )
@@ -257,14 +254,12 @@ export const TableBody = ({
  */
 interface TableProps {
   tableData: TableData; 
-  onEdit: () => void;
-  onDelete: () => void;
+  linkGenerator: CollectionLinkGenerator | MemberLinkGenerator
 }
 
 export const Table = ({ 
   tableData,
-  onEdit,
-  onDelete,
+  linkGenerator
 }: TableProps) => {
   return (
     <div className="mt-8 flow-root">
@@ -276,8 +271,7 @@ export const Table = ({
             />
             <TableBody 
               tableData={tableData} 
-              onEdit={onEdit} 
-              onDelete={onDelete} 
+              linkGenerator={linkGenerator}
             />
           </table>
         </div>

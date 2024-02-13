@@ -7,8 +7,9 @@ import {
 import {
   findMemberIndex,
   addItem,
-  updateItem,
-  deleteItem
+  deleteItem,
+  editItem,
+  prepareMemberCollectionForUpdate
 } from "./utils"
 
 
@@ -72,35 +73,33 @@ export const useHouseholdStore = create<HouseholdState>((set, get) => ({
     };
   }),
 
-  modifyMemberCollection: ({ 
-    memberId, 
-    collectionType, 
-    operation, 
-    itemData, 
-    itemId = ''
-  }) => set((state) => {
-    const memberIndex = findMemberIndex(state.household.members, memberId);
-    if (memberIndex === -1) return state;
+  addCollectionItem: ({ memberId, collectionType, data }) => set((state) => {
+    const prep = prepareMemberCollectionForUpdate(state.household.members, memberId, collectionType);
+    if (!prep) return state; // Member not found
 
-    let updatedMembers = [...state.household.members];
-    let member = { ...updatedMembers[memberIndex] };
-    let items = member[collectionType] || [];
+    prep.member[collectionType] = addItem(prep.items, data);
+    prep.updatedMembers[prep.memberIndex] = prep.member;
 
-    switch (operation) {
-      case 'add':
-        member[collectionType] = addItem(items, itemData);
-        break;
-      case 'update':
-        member[collectionType] = updateItem(items, itemId, itemData);
-        break;
-      case 'delete':
-        member[collectionType] = deleteItem(items, itemId);
-        break;
-      default:
-        break;
-    }
+    return { household: { ...state.household, members: prep.updatedMembers } };
+  }),
 
-    updatedMembers[memberIndex] = member;
-    return { household: { ...state.household, members: updatedMembers } };
+  editCollectionItem: ({ memberId, collectionType, itemId, data }) => set((state) => {
+    const prep = prepareMemberCollectionForUpdate(state.household.members, memberId, collectionType);
+    if (!prep) return state; // Member not found
+
+    prep.member[collectionType] = editItem(prep.items, itemId, data);
+    prep.updatedMembers[prep.memberIndex] = prep.member;
+
+    return { household: { ...state.household, members: prep.updatedMembers } };
+  }),
+
+  deleteCollectionItem: ({ memberId, collectionType, itemId }) => set((state) => {
+    const prep = prepareMemberCollectionForUpdate(state.household.members, memberId, collectionType);
+    if (!prep) return state; // Member not found
+
+    prep.member[collectionType] = deleteItem(prep.items, itemId);
+    prep.updatedMembers[prep.memberIndex] = prep.member;
+
+    return { household: { ...state.household, members: prep.updatedMembers } };
   }),
 }))

@@ -9,6 +9,7 @@ import {
 } from "@/components/Table"
 import HighlightButton from "@/components/HighlightButton"
 import useMembersSubset from "@/store/useMembersSubset"
+import MemberLinkGenerator from '@/utils/MemberLinkGenerator'
 
 const MembersTable = () => {
   const router = useRouter()
@@ -19,12 +20,7 @@ const MembersTable = () => {
   // If user clicks "Add Member" button
   const handleAddMember = () => router.push('/forms/members/add-member')
 
-  // If user clicks "Edit" pencil icon
-  const createEditLink = (id: string) => {
-    // const editPath = `forms/members/edit-member/${memberId}`
-    // router.push(editPath)
-    console.log('blash')
-  }
+  const memberLinkGenerator = new MemberLinkGenerator
 
   return (
     <TableContainer>
@@ -34,8 +30,7 @@ const MembersTable = () => {
       />
       <Table
         tableData={membersSubset}
-        onEdit={handleEdit}
-        onDelete={() => console.log('Delete!')}
+        linkGenerator={memberLinkGenerator}
       />
       <HighlightButton
         onClick={handleAddMember} 

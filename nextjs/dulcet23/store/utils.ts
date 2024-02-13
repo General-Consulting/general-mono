@@ -8,9 +8,9 @@ import { Member, Income, Asset } from "../types"
 export const findMemberIndex = (members: Member[], memberId: string) =>
     members.findIndex(member => member.id === memberId);
 
-// Finds the index of an income source by ID
-export const findIncomeIndex = (incomes: Income[], incomeId: string) =>
-    incomes.findIndex(income => income.id === incomeId);
+// // Finds the index of an income source by ID
+// export const findIncomeIndex = (incomes: Income[], incomeId: string) =>
+//     incomes.findIndex(income => income.id === incomeId);
 
 /* 
  * Helper functions for working with the member collections
@@ -21,10 +21,23 @@ export const findIncomeIndex = (incomes: Income[], incomeId: string) =>
 // Generic function to add an item to a member's collection (income or assets)
 export const addItem = (items: any[], newItem: any) => [...items, newItem];
 
-// Generic function to update an item in a member's collection
-export const updateItem = (items: any[], itemId: string, updatedItemData: any) => 
-    items.map(item => item.id === itemId ? { ...item, ...updatedItemData } : item);
-
 // Generic function to delete an item from a member's collection
 export const deleteItem = (items: any[], itemId: string) => 
     items.filter(item => item.id !== itemId);
+
+// Generic function to edit an item in a member's collection
+export const editItem = (items: any[], itemId: string, updatedItemData: any) => 
+    items.map(item => item.id === itemId ? { ...item, ...updatedItemData } : item);
+
+
+// Utility to prepare member and collection for modification
+export const prepareMemberCollectionForUpdate = (members: Member[], memberId: string, collectionType: 'income' | 'assets') => {
+  const memberIndex = findMemberIndex(members, memberId);
+  if (memberIndex === -1) return null; // Member not found
+
+  let updatedMembers = [...members];
+  let member = { ...updatedMembers[memberIndex] };
+  let items = member[collectionType] || [];
+
+  return { updatedMembers, member, memberIndex, items };
+};

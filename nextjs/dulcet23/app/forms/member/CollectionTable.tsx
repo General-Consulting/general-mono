@@ -9,7 +9,7 @@ import {
 } from "@/components/Table"
 import HighlightButton from "@/components/HighlightButton"
 import useCollectionSubset from "@/store/useCollectionSubset"
-import LinkGenerator from "@/utils/LinkGenerator"
+import CollectionLinkGenerator from "../../../utils/CollectionLinkGenerator"
 
 import { Collection } from "@/types"
 
@@ -23,15 +23,10 @@ const CollectionTable = ({
   collectionName,
   memberId
 }: CollectionTableProps) => {
-  const [ openModal, setOpenModal ] = useState('')
-
-
   const collectionSubset = useCollectionSubset({ memberId, collectionName })
 
-
-  const linkGenerator = new LinkGenerator()
+  const linkGenerator = new CollectionLinkGenerator(memberId, collectionName)
   
-
   return (
     <TableContainer>
       <TableTitle
@@ -40,8 +35,7 @@ const CollectionTable = ({
       />
       <Table
         tableData={collectionSubset}
-        linkGenerator={() => console.log('Edit!')}
-
+        linkGenerator={linkGenerator}
       />
       <HighlightButton
         onClick={() => {

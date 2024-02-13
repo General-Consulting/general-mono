@@ -1,7 +1,7 @@
 'use client'
 
 import { useParams } from 'next/navigation';
-import CollectionTable from "./CollectionTable"
+import CollectionTable from "../CollectionTable"
 
 interface PageComponentProps {
   params: { id: string }
