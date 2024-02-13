@@ -76,13 +76,6 @@ export type CompoundStructure = {
 
 
 
-export interface PersonName {
-  firstName: string;
-  middleName?: string;
-  lastName: string;
-  maidenName?:string;
-}
-
 export interface Address {
   street: string;
   city: string;
@@ -107,6 +100,13 @@ export interface Asset {
 }
 
 
+export interface PersonName {
+  first: string;
+  middle?: string;
+  last: string;
+  maiden?:string;
+}
+
 export interface Member {
   id: string;
   name: PersonName;
@@ -117,12 +117,7 @@ export interface Member {
 }
 
 
-export interface PersonName {
-  firstName: string;
-  middleName?: string;
-  lastName: string;
-  maidenName?:string;
-}
+
 
 export interface Address {
   street: string;
@@ -162,14 +157,14 @@ export interface HouseholdState {
  */
 
 /* Member subset: 
- * `firstName`, `lastName` from PersonName
+ * `first`, `last` from PersonName
  * `age`, derived from dob
  * `id` is required
  */ 
 export type MemberSubset = {
   id: string;
-  firstName: PersonName['firstName'];
-  lastName: PersonName['lastName'];
+  firstName: PersonName['first'];
+  lastName: PersonName['last'];
 };
 
 

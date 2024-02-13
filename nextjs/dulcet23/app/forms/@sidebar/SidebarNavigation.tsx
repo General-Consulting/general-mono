@@ -24,9 +24,9 @@ const ListDividerLine = () => {
   )
 }
 
-const getInitialWithPeriod = (str: string) => {
-  return str.charAt(0) + '.';
-}
+// const getInitialWithPeriod = (str: string) => {
+//   return str.charAt(0) + '.';
+// }
 
 
 const SidebarNavigation = () => {
@@ -34,7 +34,7 @@ const SidebarNavigation = () => {
 
   const createMemberNode = (member: MemberSubset) => {
     const { firstName, lastName } = member
-    const lastInitial = lastName.charAt(0) + '.'
+    // const lastInitial = lastName.charAt(0) + '.'
 
     return (
       <>

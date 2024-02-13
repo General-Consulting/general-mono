@@ -14,6 +14,8 @@ const MembersTable = () => {
   const router = useRouter()
   const membersSubset = useMembersSubset()
 
+  console.log('In MembersTable and membersSubset is', membersSubset)
+
   const handleAddMember = () => router.push('/forms/members/add-member')
 
   return (

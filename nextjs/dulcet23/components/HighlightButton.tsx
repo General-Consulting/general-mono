@@ -1,58 +1,46 @@
 'use client'
 
 import { clsx } from "clsx";
-import { ReactNode } from "react";
+import { ButtonHTMLAttributes } from "react";
 
-interface HighlightButtonProps {
+// Extend the ButtonHTMLAttributes to allow all button native props if needed
+type BaseButtonProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'type'>;
+
+// Define exclusive props for submit and button types
+type SubmitButtonProps = {
+  type: 'submit';
+  onClick?: never; // Disallow onClick when type is 'submit'
+} & BaseButtonProps;
+
+type ClickButtonProps = {
+  type?: 'button'; // Make 'button' the default or only allowed type when onClick is provided
   onClick: () => void;
-  className?: string
-  children: ReactNode
-}
+} & BaseButtonProps;
 
-// Define the HighlightButton component
+// Combine using a union type
+type HighlightButtonProps = SubmitButtonProps | ClickButtonProps;
+
 const HighlightButton = ({
+  type = 'button', // Default type to 'button'
   onClick,
   className,
-  children 
+  children,
 }: HighlightButtonProps) => {
+  // Implementation remains the same
   return (
     <div className="mt-4 sm:mt-0 sm:flex-none">
       <button
-        type="button"
+        type={type}
         onClick={onClick}
         className={clsx(
-          // Display
-          "block",
-
-          // Shape
-          "rounded-md",
-
-          // Padding
-          "px-3 py-2",
-
-          // Text & font size, alignment, & color
-          "text-center text-sm font-semibold text-white",
-
-          // Shadow
-          "shadow-sm",
-
-          // Button color
-          "bg-indigo-600",
-
-          // Hover styles
-          "hover:bg-indigo-500",
-
-          // Focus-visible styles
-          "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600",
-
-          // Add or overwrite Tailwind classes
+          "block rounded-md px-3 py-2 text-center text-sm font-semibold text-white shadow-sm bg-indigo-600 hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600",
           className,
         )}
       >
         {children}
       </button>
     </div>
-  )
-}
+  );
+};
 
-export default HighlightButton
+export default HighlightButton;

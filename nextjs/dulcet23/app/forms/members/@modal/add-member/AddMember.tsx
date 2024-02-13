@@ -1,13 +1,14 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useForm, FormProvider, useFormContext } from "react-hook-form"
+import { useForm, FormProvider } from "react-hook-form"
 
 import DefaultButton from '@/components/DefaultButton';
 import FieldFactory from '@/components/FieldFactory';
 import HighlightButton from '@/components/HighlightButton';
 import { ModalDivider } from '@/components/Modal'
 import { allPossibleMemberFields } from '@/constants/allPossibleMembersFields'
+import { useHouseholdStore } from '@/store/useHouseholdStore';
 
 
 interface AddMemberProps {
@@ -17,18 +18,24 @@ interface AddMemberProps {
 const AddMember = ({
   onCancel
 }: AddMemberProps) => {
+  const router = useRouter()
   // TODO - getDefaultValues
   const methods = useForm()
+  const { addMember } = useHouseholdStore()
+  
 
-  console.log('In the addMember component')
-
+  const onSubmit = (data: any) => {
+    console.log('Inside onSubmit and data is', data)
+    addMember(data)
+    router.push('/forms/members')
+  }
 
   const handleCancel = () => onCancel()
-  const handleSave = () => console.log('Saved!')
+
 
   return (
     <FormProvider {...methods}>
-      <form>
+      <form onSubmit={methods.handleSubmit(onSubmit)}>
         <FieldFactory fieldData={allPossibleMemberFields} />
         <ModalDivider />
         <div className="sm:flex sm:justify-between">
@@ -39,7 +46,8 @@ const AddMember = ({
             Cancel
           </DefaultButton>
           <HighlightButton
-            onClick={handleSave}
+            // onClick={handleSave}
+            type="submit"
             className="w-full sm:w-24"
           >
             Save
