@@ -1,7 +1,7 @@
 'use client'
 
 import { Dialog, Transition } from '@headlessui/react'
-import { PencilIcon } from '@heroicons/react/24/outline'
+import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { Fragment, ReactNode } from 'react'
 import { usePathname } from 'next/navigation'
 
@@ -17,6 +17,7 @@ interface ModalProps {
   children: ReactNode;
   modalPath: string;
   showEditIcon?: boolean;
+  showTrashIcon?: boolean;
 }
 
 const Modal = ({
@@ -24,7 +25,8 @@ const Modal = ({
   title,
   onCancel,
   modalPath,
-  showEditIcon
+  showEditIcon,
+  showTrashIcon
 }: ModalProps) => {
 
   const pathname = usePathname();
@@ -66,6 +68,11 @@ const Modal = ({
                   {showEditIcon && (
                     <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-indigo-100">
                       <PencilIcon className="h-6 w-6 text-indigo-600" aria-hidden="true" />
+                    </div>
+                  )}
+                  {showTrashIcon && (
+                    <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-indigo-100">
+                      <TrashIcon className="h-6 w-6 text-indigo-600" aria-hidden="true" />
                     </div>
                   )}
                   <div className="mt-3 text-center sm:mt-5">

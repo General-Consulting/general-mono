@@ -2,7 +2,7 @@
 
 import { useParams, useRouter } from 'next/navigation'
 
-import AddCollectionItem from './AddCollectionItem';
+import DeleteCollectionItem from './DeleteCollectionItem';
 import Modal from '@/components/Modal';
 
 const Page = () => {
@@ -10,24 +10,28 @@ const Page = () => {
   const { 
     memberId, 
     collectionType,
-  } = useParams<{ memberId: string, collectionType: 'income' | 'assets' }>()
+    itemId
+  } = useParams<{ 
+    memberId: string, 
+    collectionType: 'income' | 'assets',
+    itemId: string 
+  }>()
   
-  const modalTitle = `Add item to ${collectionType}`
-  
-  const modalPath = `/forms/member/${memberId}/income/add`
+  const modalPath = `/forms/member/${memberId}/${collectionType}/edit/${itemId}`
 
   const handleCancel = () => router.push(`/forms/member/${memberId}`)
 
   return (
     <Modal 
-      title={modalTitle}
+      title="Delete Item"
       onCancel={handleCancel}
       modalPath={modalPath}
-      showEditIcon
+      showTrashIcon
     >
-      <AddCollectionItem
+      <DeleteCollectionItem
+        collectionType={collectionType}
+        itemId={itemId} 
         memberId={memberId}
-        collectionType={collectionType} 
         onCancel={handleCancel} 
       />
     </Modal>
