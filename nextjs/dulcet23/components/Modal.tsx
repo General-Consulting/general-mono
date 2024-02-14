@@ -1,7 +1,11 @@
 'use client'
 
 import { Dialog, Transition } from '@headlessui/react'
-import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline'
+import { 
+  PencilIcon, 
+  TrashIcon, 
+  ExclamationTriangleIcon 
+} from '@heroicons/react/24/outline'
 import { Fragment, ReactNode } from 'react'
 import { usePathname } from 'next/navigation'
 
@@ -18,6 +22,7 @@ interface ModalProps {
   modalPath: string;
   showEditIcon?: boolean;
   showTrashIcon?: boolean;
+  showWarningIcon?: boolean;
 }
 
 const Modal = ({
@@ -26,7 +31,8 @@ const Modal = ({
   onCancel,
   modalPath,
   showEditIcon,
-  showTrashIcon
+  showTrashIcon,
+  showWarningIcon
 }: ModalProps) => {
 
   const pathname = usePathname();
@@ -73,6 +79,11 @@ const Modal = ({
                   {showTrashIcon && (
                     <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-indigo-100">
                       <TrashIcon className="h-6 w-6 text-indigo-600" aria-hidden="true" />
+                    </div>
+                  )}
+                  {showWarningIcon && (
+                    <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-indigo-100">
+                      <ExclamationTriangleIcon className="h-6 w-6 text-indigo-600" aria-hidden="true" />
                     </div>
                   )}
                   <div className="mt-3 text-center sm:mt-5">
