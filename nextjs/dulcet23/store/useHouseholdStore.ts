@@ -51,16 +51,17 @@ export const useHouseholdStore = create<HouseholdState>((set, get) => ({
     }
   }),
 
-  // Update member function
-  updateMember: (updatedMemberData) => set((state) => {
-    const updatedMemberId = updatedMemberData.id
-    const index = findMemberIndex(state.household.members, updatedMemberId);
+  editMember: ({ memberId, data }) => set((state) => {
+    const index = state.household.members.findIndex(member => member.id === memberId);
     if (index !== -1) {
+      // Create a new array of members to maintain immutability
       let updatedMembers = [...state.household.members];
-      updatedMembers[index] = { ...updatedMembers[index], ...updatedMemberData };
+      // Update only the specified fields for the member
+      updatedMembers[index] = { ...updatedMembers[index], ...data };
+      // Return the new state with the updated members array
       return { household: { ...state.household, members: updatedMembers } };
     }
-    return state;
+    return state; // In case the memberId does not match any member, return the current state
   }),
 
   // Delete member function
@@ -73,6 +74,7 @@ export const useHouseholdStore = create<HouseholdState>((set, get) => ({
     };
   }),
 
+  // Add item to a member collection, e.g. income
   addCollectionItem: ({ memberId, collectionType, data }) => set((state) => {
     const prep = prepareMemberCollectionForUpdate(state.household.members, memberId, collectionType);
     if (!prep) return state; // Member not found
@@ -83,6 +85,7 @@ export const useHouseholdStore = create<HouseholdState>((set, get) => ({
     return { household: { ...state.household, members: prep.updatedMembers } };
   }),
 
+  // Edit item in a member collection, e.g. income
   editCollectionItem: ({ memberId, collectionType, itemId, data }) => set((state) => {
     const prep = prepareMemberCollectionForUpdate(state.household.members, memberId, collectionType);
     if (!prep) return state; // Member not found
@@ -93,6 +96,7 @@ export const useHouseholdStore = create<HouseholdState>((set, get) => ({
     return { household: { ...state.household, members: prep.updatedMembers } };
   }),
 
+  // Delete item in a member collection, e.g. income
   deleteCollectionItem: ({ memberId, collectionType, itemId }) => set((state) => {
     const prep = prepareMemberCollectionForUpdate(state.household.members, memberId, collectionType);
     if (!prep) return state; // Member not found

@@ -6,6 +6,11 @@ export interface Household {
   // Other flat data to be defined later
 }
 
+// Args when calling editMember method
+interface EditMemberArgs {
+  memberId: string,
+  data: Member
+}
 
 // Base type for common parameters
 interface CollectionFunctionBaseArgs {
@@ -29,11 +34,13 @@ interface DeleteCollectionItemArgs extends CollectionFunctionBaseArgs {
   itemId: string;
 }
 
+
+
 // Adjust HouseholdState interface to use these specific types
 export interface HouseholdState {
   household: Household;
   addMember: (newMemberData: Member) => void;
-  updateMember: (updatedMemberData: Member) => void;
+  editMember: ({ memberId, data }: EditMemberArgs) => void;
   deleteMember: (memberId: string) => void;
   addCollectionItem: (params: AddCollectionItemArgs) => void;
   editCollectionItem: (params: EditCollectionItemArgs) => void;
