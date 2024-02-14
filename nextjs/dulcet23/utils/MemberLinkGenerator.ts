@@ -9,18 +9,18 @@ export default class MemberLinkGenerator {
   createAddLink(): string {
     // Return URL string with form: 
     // "/members/add-member"
-    return 'members/add-member'
+    return '/forms/members/add-member'
   }
 
   createDeleteLink(id: string): string {
     // Return URL string with form: 
     // "/members/delete-member/[memberId]"
-    return `/members/delete-member/${id}`
+    return `/forms/members/delete-member/${id}`
   }
 
   createEditLink(id: string): string {
     // Return URL string with form: 
     // "/members/delete-member/[memberId]"
-    return `/members/edit-member/${id}`
+    return `/forms/members/edit-member/${id}`
   }
 }

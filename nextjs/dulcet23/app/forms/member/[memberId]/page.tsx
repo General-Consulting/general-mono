@@ -14,13 +14,14 @@ interface PageComponentProps {
 const PageComponent = () => {
   const { memberId } = useParams<{memberId: string }>();
 
+  console.log('Inside the forms/member/memberId route')
+
   return (
     <>
       <CollectionTable 
         collectionName="income"
         memberId={memberId}
       />
-
     </>
   )
 }

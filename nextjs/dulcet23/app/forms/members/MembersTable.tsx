@@ -15,12 +15,11 @@ const MembersTable = () => {
   const router = useRouter()
   const membersSubset = useMembersSubset()
 
-  console.log('In MembersTable and membersSubset is', membersSubset)
+  const memberLinkGenerator = new MemberLinkGenerator
 
   // If user clicks "Add Member" button
-  const handleAddMember = () => router.push('/forms/members/add-member')
-
-  const memberLinkGenerator = new MemberLinkGenerator
+  const addMemberLink = memberLinkGenerator.createAddLink()
+  const handleAddMember = () => router.push(addMemberLink)
 
   return (
     <TableContainer>
@@ -32,9 +31,7 @@ const MembersTable = () => {
         tableData={membersSubset}
         linkGenerator={memberLinkGenerator}
       />
-      <HighlightButton
-        onClick={handleAddMember} 
-      >
+      <HighlightButton onClick={handleAddMember}>
         Add Member
       </HighlightButton>
     </TableContainer>

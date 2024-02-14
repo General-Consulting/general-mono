@@ -23,7 +23,7 @@ export default class CollectionLinkGenerator {
 
     // Return URL string with form: 
     // "/member/[memberId]/[collectionType]/add"
-    return `/member/${memberId}/${collectionType}/${operation}`
+    return `/forms/member/${memberId}/${collectionType}/${operation}`
   }
 
   createDeleteLink(id: string): string {
@@ -33,7 +33,7 @@ export default class CollectionLinkGenerator {
 
     // Return URL string with form: 
     // "/member/[memberId]/[collectionType]/delete/[collectionId]"
-    return `/member/${memberId}/${collectionType}/${operation}/${id}`
+    return `/forms/member/${memberId}/${collectionType}/${operation}/${id}`
   }
 
   createEditLink(id: string): string {
@@ -43,6 +43,6 @@ export default class CollectionLinkGenerator {
 
     // Return URL string with form: 
     // "/member/[memberId]/[collectionType]/edit/[collectionId]"
-    return `/member/${memberId}/${collectionType}/${operation}/${id}`
+    return `/forms/member/${memberId}/${collectionType}/${operation}/${id}`
   }
 }

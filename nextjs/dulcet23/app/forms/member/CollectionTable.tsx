@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from "react"
+import { useRouter } from "next/navigation"
 
 import { 
   TableContainer,
@@ -23,10 +23,15 @@ const CollectionTable = ({
   collectionName,
   memberId
 }: CollectionTableProps) => {
+  const router = useRouter()
   const collectionSubset = useCollectionSubset({ memberId, collectionName })
 
-  const linkGenerator = new CollectionLinkGenerator(memberId, collectionName)
+  const collectionLinkGenerator = new CollectionLinkGenerator(memberId, collectionName)
   
+  // Handle if member clicks "Add" button
+  const addCollectionItemLink = collectionLinkGenerator.createAddLink()
+  const handleAdd = () => router.push(addCollectionItemLink)
+
   return (
     <TableContainer>
       <TableTitle
@@ -35,13 +40,9 @@ const CollectionTable = ({
       />
       <Table
         tableData={collectionSubset}
-        linkGenerator={linkGenerator}
+        linkGenerator={collectionLinkGenerator}
       />
-      <HighlightButton
-        onClick={() => {
-          console.log('Clicked add member, add functionality :)')
-        }} 
-      >
+      <HighlightButton onClick={handleAdd}>
         Add
       </HighlightButton>
     </TableContainer>

@@ -13,7 +13,7 @@ const Page = () => {
     collectionType,
   } = useParams<{ memberId: string, collectionType: 'income' | 'assets' }>()
   
-  const modalPath = `/forms/member/${memberId}/${collectionType}/add`
+  const modalPath = `/forms/member/${memberId}/income/add`
 
   const handleCancel = () => router.push(`/forms/member/${memberId}`)
 
