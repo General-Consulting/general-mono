@@ -24,7 +24,7 @@
   outputs = { self, nixpkgs, flake-utils, devshell, flake-parts, mission-control, flake-root, treefmt-nix, ... }@inputs:
     flake-parts.lib.mkFlake { inherit inputs; } {
 
-      systems = nixpkgs.lib.systems.flakeExposed;
+      systems = [ "x86_64-linux" "aarch64-linux" "aarch64-darwin" "x86_64-darwin" ];
       imports = [
         inputs.flake-root.flakeModule
         inputs.treefmt-nix.flakeModule
@@ -77,11 +77,11 @@
 
           src = ./nextjs/dulcet23/.;
 
-          npmDepsHash = "sha256-3IyRkzPckXsmeDkZew3KvkviE7YwOd5hyDNS7Hw2iAs=";
+          npmDepsHash = "sha256-Pnv2GewP+z1dxY0c1Lj0T8vxrvL09EZMwryeGksro4M=";
 
           installPhase = ''
             mkdir -p $out
-            cp .next/* $out
+            cp -r .next/* $out
           '';
         };
         in 
@@ -110,24 +110,29 @@
             exec = "just fmt";
           };
 
-          ks = {
+          k8s = {
             description = "start minikube cluster";
             exec = "just cluster";
           };
 
-          npd = {
+          pdf = {
             description = "NextJS PDF Dev";
             exec = "just devjs";
           };
 
-          kd = {
+          dash = {
             description = "A Dashboard for the minikube cluster";
             exec = "just dashboard";
           };
 
-          ka = {
+          apply = {
             description = "Apply the kubernetes manifests";
             exec = "just k8sapply";
+          };
+
+          build = {
+            description = "Use nix to build the PDF nextjs app";
+            exec = "nix build";
           };
 
         };

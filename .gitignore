@@ -1,1 +1,5 @@
+
+#nix
+#
 /.direnv
+/result
