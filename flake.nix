@@ -29,6 +29,7 @@
         inputs.flake-root.flakeModule
         inputs.treefmt-nix.flakeModule
         inputs.mission-control.flakeModule
+        inputs.devshell.flakeModule
       ];
 
 
@@ -43,31 +44,6 @@
         echo "nextjs:!:1::::::" > $out/etc/shadow
       '';
 
-      dockerImage = pkgs.dockerTools.buildImage {
-        name = "app";
-        tag = "latest";
-        copyToRoot = [
-          # Uncomment the coreutils and bash if you want to be able to use a shell environment
-          # inside the container.
-          #pkgs.coreutils
-          #pkgs.bash
-          nextUser
-          pkgs.nodejs-18_x
-          pdf-app
-        ];
-        config = {
-          Cmd = [ "node" "server.js" ];
-          User = "nextjs:nextjs";
-          Env = [ "NEXT_TELEMETRY_DISABLED=1" ];
-          ExposedPorts = {
-              "3000/tcp" = {};
-          };
-          WorkingDir = "/app";
-        };
-      };
-
-
-
         pdf-app = pkgs.buildNpmPackage {
           name = "dulcet23";
 
@@ -80,10 +56,38 @@
           npmDepsHash = "sha256-Pnv2GewP+z1dxY0c1Lj0T8vxrvL09EZMwryeGksro4M=";
 
           installPhase = ''
-            mkdir -p $out
-            cp -r .next/* $out
+            mkdir -p $out/app/.next
+            cp -r public $out/app
+            cp -r .next/standalone/* $out/app
+            cp -r .next/server $out/app/.next
+            cp -r .next/BUILD_ID $out/app/.next
+            cp -r .next/*manifest.json $out/app/.next
+            cp -r .next/static $out/app/.next/static
           '';
         };
+      dockerImagePdf = pkgs.dockerTools.buildImage {
+        name = "generalconsulting/pdf-app";
+        tag = "latest";
+        copyToRoot = [
+          # Uncomment coreutils and bash to use a shell environment inside the container.
+          pkgs.coreutils
+          pkgs.bash
+          pkgs.busybox
+          nextUser
+          pkgs.nodejs-18_x
+          pdf-app
+        ];
+        config = {
+          Cmd = [ "node" "server.js"];
+          User = "nextjs:nextjs";
+          Env = [ "NEXT_TELEMETRY_DISABLED=1" ];
+          ExposedPorts = {
+              "3000/tcp" = {};
+          };
+          WorkingDir = "/app";
+        };
+      };
+
         in 
       {
 
@@ -91,7 +95,7 @@
         
         packages = {
             pdf-app = pdf-app;
-            dockerImage = dockerImage;
+            dockerImagePdf = dockerImagePdf;
             default = pdf-app;
           };
     
@@ -104,54 +108,64 @@
           programs.prettier.includes = [ "*.tsx" ];
         };
 
-        mission-control.scripts = {
-          fmt = {
-            description = "format the whole repo";
-            exec = "just fmt";
-          };
-
-          k8s = {
-            description = "start minikube cluster";
-            exec = "just cluster";
-          };
-
-          pdf = {
-            description = "NextJS PDF Dev";
-            exec = "just devjs";
-          };
-
-          dash = {
-            description = "A Dashboard for the minikube cluster";
-            exec = "just dashboard";
-          };
-
-          apply = {
-            description = "Apply the kubernetes manifests";
-            exec = "just k8sapply";
-          };
-
-          build = {
-            description = "Use nix to build the PDF nextjs app";
-            exec = "nix build";
-          };
-
-        };
-
-        devShells.default = pkgs.mkShell {
-          nativeBuildInputs = with pkgs; [
+        
+        devshells.default = {
+          packages = with pkgs; [
             just
             config.treefmt.build.wrapper
             minikube
             nodejs
             yarn
             kustomize
+            cargo
           ];
 
-          inputsFrom = [
-            config.flake-root.devShell
-            config.treefmt.build.devShell
-            config.mission-control.devShell
-          ];
+        commands = [
+         {
+            name = "fmt";
+            help = "format the whole repo";
+            command = "just fmt";
+         }
+
+          {
+            name = "k8s";
+            help = "start minikube cluster";
+            command = "just cluster";
+          }
+
+          {
+            name = "pdf";
+            help = "NextJS PDF Dev";
+            command = "just devjs";
+          }
+
+          {
+            name = "dash";
+            help = "A Dashboard for the minikube cluster";
+            command = "just dashboard";
+          }
+
+          {
+            name = "apply";
+            help = "Apply the kubernetes manifests";
+            command = "just k8sapply";
+          }
+
+          {
+            name = "build-pdf";
+            help = "Use nix to build the PDF nextjs app";
+            command = "nix build";
+          }
+          {
+            name = "docker-build-pdf" ;
+            help = "Use nix to build a docker image for the pdf-app";
+            command = "nix build .#dockerImagePdf && docker load < ./result";
+          }
+
+        ];
+
+
+
         };
       };
     };
