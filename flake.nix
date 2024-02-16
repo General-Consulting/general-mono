@@ -46,26 +46,7 @@
       '';
 
 
-          profile = pkgs.writeTextFile {
-              name = "general_profile.sh";
-              destination = "/etc/profile.d/general_profile.sh";
-              text = 
-              ''export LAST_COMMAND_WAS_EMPTY=false
-              export GEOFF_WAS_HERE=true
 
-              # Trap DEBUG signal to check each command before execution
-              trap '[[ -z $BASH_COMMAND ]] && export LAST_COMMAND_WAS_EMPTY=true || export LAST_COMMAND_WAS_EMPTY=false' DEBUG
-
-              [ $ZSH_VERSION ] && precmd() { prompt; }
-
-              [ $BASH_VERSION ] && PROMPT_COMMAND=myprompt
-
-              prompt() {
-                echo running command
-                if $LAST_COMMAND_WAS_EMPTY; then menu; else echo nothing; fi
-              }
-'';
-            };
 
         pdf-app = pkgs.buildNpmPackage {
           name = "dulcet23";
@@ -140,13 +121,15 @@
             yarn
             kustomize
             cargo
-            profile
             devshell
           ];
 
-        devshell.load_profiles=true;
-
         commands = [
+         {
+            name = ",";
+            help = "bring up this menu";
+            command = "menu";
+         }
          {
             name = "fmt";
             help = "format the whole repo";
