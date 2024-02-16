@@ -34,6 +34,7 @@
 
 
 
+
       perSystem = { pkgs, system, self', config, inputs', lib, ... }: 
 
        let 
@@ -43,6 +44,28 @@
         echo "nextjs:x:1000:" > $out/etc/group
         echo "nextjs:!:1::::::" > $out/etc/shadow
       '';
+
+
+          profile = pkgs.writeTextFile {
+              name = "general_profile.sh";
+              destination = "/etc/profile.d/general_profile.sh";
+              text = 
+              ''export LAST_COMMAND_WAS_EMPTY=false
+              export GEOFF_WAS_HERE=true
+
+              # Trap DEBUG signal to check each command before execution
+              trap '[[ -z $BASH_COMMAND ]] && export LAST_COMMAND_WAS_EMPTY=true || export LAST_COMMAND_WAS_EMPTY=false' DEBUG
+
+              [ $ZSH_VERSION ] && precmd() { prompt; }
+
+              [ $BASH_VERSION ] && PROMPT_COMMAND=myprompt
+
+              prompt() {
+                echo running command
+                if $LAST_COMMAND_WAS_EMPTY; then menu; else echo nothing; fi
+              }
+'';
+            };
 
         pdf-app = pkgs.buildNpmPackage {
           name = "dulcet23";
@@ -92,7 +115,6 @@
       {
 
 
-        
         packages = {
             pdf-app = pdf-app;
             dockerImagePdf = dockerImagePdf;
@@ -118,7 +140,11 @@
             yarn
             kustomize
             cargo
+            profile
+            devshell
           ];
+
+        devshell.load_profiles=true;
 
         commands = [
          {
@@ -161,10 +187,13 @@
             help = "Use nix to build a docker image for the pdf-app";
             command = "nix build .#dockerImagePdf && docker load < ./result";
           }
-
+          {
+            name = "docker-run-pdf" ;
+            help = "Use nix to build and run docker image for the pdf-app (in the foreground)";
+            command = "nix build .#dockerImagePdf && docker load < ./result";
+          }
+        
         ];
-
-
 
         };
       };
