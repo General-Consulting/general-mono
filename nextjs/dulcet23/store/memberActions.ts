@@ -1,9 +1,14 @@
-// memberActions.ts
-import { StateCreator } from 'zustand';
-import { HouseholdState, Member } from './types';
+
+import { StoreApi } from 'zustand';
+
+import { HouseholdState, Member } from '@/types';
 import { findMemberIndex } from "./utils";
 
-const memberActions: StateCreator<HouseholdState, [], [], HouseholdState> = (set, get) => ({
+const memberActions = (
+  set: StoreApi<HouseholdState>['setState'],
+  get: StoreApi<HouseholdState>['getState'],
+  api: StoreApi<HouseholdState>
+) => ({  
   addMember: (newMemberData: Member) => {
     set((state) => {
       const newMemberId = newMemberData.id;

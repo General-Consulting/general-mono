@@ -1,48 +1,48 @@
-import { Asset, Income, Member } from './entity.types'
+import { CollectionNameToTypeMap } from "./collection.types"
+import { Member } from "./member.types";
 
-export interface Household {
-  id?: string;
-  members: Member[];
-  // Other flat data to be defined later
-}
 
-// Args when calling editMember method
-export interface EditMemberArgs {
+// Specific type for editing a member 
+export interface EditMemberParams {
   memberId: string,
   data: Member
 }
 
 // Base type for common parameters
-export interface CollectionFunctionBaseArgs {
+export interface CollectionFunctionBaseParams<T extends keyof CollectionNameToTypeMap> {
   memberId: string;
-  collectionType: 'income' | 'assets';
+  collectionName: T;
 }
 
-// Specific type for adding a collection item (does not require itemId)
-export interface AddCollectionItemArgs extends CollectionFunctionBaseArgs {
-  data: Asset | Income;
+// Specific type for adding a collection item
+export interface AddCollectionItemParams<T extends keyof CollectionNameToTypeMap> extends CollectionFunctionBaseParams<T> {
+  data: CollectionNameToTypeMap[T];
 }
 
-// Specific type for editing a collection item (requires all parameters)
-export interface EditCollectionItemArgs extends CollectionFunctionBaseArgs {
+// Specific type for editing a collection item, now using generics
+export interface EditCollectionItemParams<T extends keyof CollectionNameToTypeMap> extends CollectionFunctionBaseParams<T> {
   itemId: string;
-  data: Asset | Income;
+  data: CollectionNameToTypeMap[T];
 }
 
-// Specific type for deleting a collection item (does not require data)
-export interface DeleteCollectionItemArgs extends CollectionFunctionBaseArgs {
+// Specific type for deleting a collection item
+export interface DeleteCollectionItemParams extends CollectionFunctionBaseParams<keyof CollectionNameToTypeMap> {
   itemId: string;
 }
 
 
+export interface Household {
+  members: Member[];
+  // Other flat data to be defined later
+}
 
 // Adjust HouseholdState interface to use these specific types
 export interface HouseholdState {
   household: Household;
   addMember: (newMemberData: Member) => void;
-  editMember: ({ memberId, data }: EditMemberArgs) => void;
+  editMember: ({ memberId, data }: EditMemberParams) => void;
   deleteMember: (memberId: string) => void;
-  addCollectionItem: (params: AddCollectionItemArgs) => void;
-  editCollectionItem: (params: EditCollectionItemArgs) => void;
-  deleteCollectionItem: (params: DeleteCollectionItemArgs) => void;
+  addCollectionItem: <T extends keyof CollectionNameToTypeMap>(params: AddCollectionItemParams<T>) => void;
+  editCollectionItem: <T extends keyof CollectionNameToTypeMap>(params: EditCollectionItemParams<T>) => void;
+  deleteCollectionItem: (params: DeleteCollectionItemParams) => void;
 }
