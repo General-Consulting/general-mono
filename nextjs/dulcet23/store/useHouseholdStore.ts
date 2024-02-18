@@ -14,10 +14,11 @@ import {
 
 
 import { testMember1, testMember2 } from "./forDevOnly"
+import { collectionActions } from "./collectionActions"
 
 
 
-export const useHouseholdStore = create<HouseholdState>((set, get) => ({
+export const useUserStore = create<HouseholdState>()((...a) => ({
   household: { members: [ testMember1, testMember2 ] }, // Initial state
 
   // Use the get method to get a member's first and last name by ID
@@ -74,36 +75,38 @@ export const useHouseholdStore = create<HouseholdState>((set, get) => ({
     };
   }),
 
-  // Add item to a member collection, e.g. income
-  addCollectionItem: ({ memberId, collectionType, data }) => set((state) => {
-    const prep = prepareMemberCollectionForUpdate(state.household.members, memberId, collectionType);
-    if (!prep) return state; // Member not found
+  ...collectionActions(...a),
 
-    prep.member[collectionType] = addItem(prep.items, data);
-    prep.updatedMembers[prep.memberIndex] = prep.member;
+  // // Add item to a member collection, e.g. income
+  // addCollectionItem: ({ memberId, collectionType, data }) => set((state) => {
+  //   const prep = prepareMemberCollectionForUpdate(state.household.members, memberId, collectionType);
+  //   if (!prep) return state; // Member not found
 
-    return { household: { ...state.household, members: prep.updatedMembers } };
-  }),
+  //   prep.member[collectionType] = addItem(prep.items, data);
+  //   prep.updatedMembers[prep.memberIndex] = prep.member;
 
-  // Edit item in a member collection, e.g. income
-  editCollectionItem: ({ memberId, collectionType, itemId, data }) => set((state) => {
-    const prep = prepareMemberCollectionForUpdate(state.household.members, memberId, collectionType);
-    if (!prep) return state; // Member not found
+  //   return { household: { ...state.household, members: prep.updatedMembers } };
+  // }),
 
-    prep.member[collectionType] = editItem(prep.items, itemId, data);
-    prep.updatedMembers[prep.memberIndex] = prep.member;
+  // // Edit item in a member collection, e.g. income
+  // editCollectionItem: ({ memberId, collectionType, itemId, data }) => set((state) => {
+  //   const prep = prepareMemberCollectionForUpdate(state.household.members, memberId, collectionType);
+  //   if (!prep) return state; // Member not found
 
-    return { household: { ...state.household, members: prep.updatedMembers } };
-  }),
+  //   prep.member[collectionType] = editItem(prep.items, itemId, data);
+  //   prep.updatedMembers[prep.memberIndex] = prep.member;
 
-  // Delete item in a member collection, e.g. income
-  deleteCollectionItem: ({ memberId, collectionType, itemId }) => set((state) => {
-    const prep = prepareMemberCollectionForUpdate(state.household.members, memberId, collectionType);
-    if (!prep) return state; // Member not found
+  //   return { household: { ...state.household, members: prep.updatedMembers } };
+  // }),
 
-    prep.member[collectionType] = deleteItem(prep.items, itemId);
-    prep.updatedMembers[prep.memberIndex] = prep.member;
+  // // Delete item in a member collection, e.g. income
+  // deleteCollectionItem: ({ memberId, collectionType, itemId }) => set((state) => {
+  //   const prep = prepareMemberCollectionForUpdate(state.household.members, memberId, collectionType);
+  //   if (!prep) return state; // Member not found
 
-    return { household: { ...state.household, members: prep.updatedMembers } };
-  }),
+  //   prep.member[collectionType] = deleteItem(prep.items, itemId);
+  //   prep.updatedMembers[prep.memberIndex] = prep.member;
+
+  //   return { household: { ...state.household, members: prep.updatedMembers } };
+  // }),
 }))
