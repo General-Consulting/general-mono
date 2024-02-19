@@ -133,6 +133,7 @@
 
         
         devshells.default = {
+          name = "general consulting dev environment";
           packages = with pkgs; [
             just
             config.treefmt.build.wrapper
