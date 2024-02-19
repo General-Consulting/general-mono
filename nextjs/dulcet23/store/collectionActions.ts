@@ -5,19 +5,15 @@ import {
   HouseholdState, 
   AddCollectionItemParams,
   CollectionNameToTypeMap, 
-  EditCollectionItemParams, 
   DeleteCollectionItemParams,
+  EditCollectionItemParams,
+  GetCollectionSubsetParams, 
+  ToArrayTypes,
+  Member,
   // IncomeSubset,
   // AssetSubset 
 } from '@/types';
 import { prepareMemberCollectionForUpdate } from './utils';
-
-// Mapping interface
-interface CollectionTypeMap {
-  income: IncomeSubset[];
-  assets: AssetSubset[];
-  // Add new mappings here as your application grows
-}
 
 
 const collectionActions = (
@@ -25,82 +21,95 @@ const collectionActions = (
   get: StoreApi<HouseholdState>['getState'],
 ) => ({
 
-  addCollectionItem: <
-    T extends keyof CollectionNameToTypeMap
-  >({ 
-    memberId, 
-    collectionName, 
-    data 
+  addCollectionItem: <T extends keyof CollectionNameToTypeMap>({
+    memberId,
+    collectionName,
+    data,
   }: AddCollectionItemParams<T>) => {
-    const prep = prepareMemberCollectionForUpdate(get().household.members, memberId, collectionName);
+    const members = get().household.members
+    const prep = prepareMemberCollectionForUpdate<T>({ members, memberId, collectionName });
     if (!prep) return;
-
-    // Directly incorporate addItem functionality here
-    // If the collection doesn't exist, initialize it as an empty array
-    const updatedCollection = [...(prep.member[collectionName] || []), data];
-    prep.member[collectionName] = updatedCollection;
+  
+    const updatedCollection: CollectionNameToTypeMap[T][] = [...(prep.items as CollectionNameToTypeMap[T][]), data];
+  
+    // Correctly typing the assignment using a more refined approach
+    prep.member = {
+      ...prep.member,
+      [collectionName]: updatedCollection as unknown as Member & { [P in T]?: CollectionNameToTypeMap[T][] }[T]
+    };
+  
     prep.updatedMembers[prep.memberIndex] = prep.member;
-
+  
     set({ household: { ...get().household, members: prep.updatedMembers } });
   },
 
-  editCollectionItem: <
-    T extends keyof CollectionNameToTypeMap
-  >({
+  editCollectionItem: <T extends keyof CollectionNameToTypeMap>({
     memberId,
     collectionName,
     itemId,
     data,
   }: EditCollectionItemParams<T>) => {
-
-  editCollectionItem: ({ memberId, collectionName, itemId, data }: EditCollectionItemParams) => {
-    const prep = prepareMemberCollectionForUpdate(get().household.members, memberId, collectionName);
+    const members = get().household.members
+    const prep = prepareMemberCollectionForUpdate<T>({ members, memberId, collectionName });
     if (!prep) return;
   
-    // Directly incorporate editItem functionality here
-    const updatedCollection = prep.items.map(item => item.id === itemId ? { ...item, ...data } : item);
-    prep.member[collectionName] = updatedCollection;
+    const updatedCollection: CollectionNameToTypeMap[T][] = prep.items.map(item => 
+      item.id === itemId ? { ...item, ...data } : item
+    );
+  
+    // Correctly typing the assignment using a more refined approach
+    // This ensures TypeScript understands the assignment's validity
+    prep.member = {
+      ...prep.member,
+      [collectionName]: updatedCollection as unknown as Member & { [P in T]?: CollectionNameToTypeMap[T][] }[T]
+    };
+  
     prep.updatedMembers[prep.memberIndex] = prep.member;
   
     set({ household: { ...get().household, members: prep.updatedMembers } });
   },
+  
 
-  deleteCollectionItem: ({ memberId, collectionName, itemId }: DeleteCollectionItemParams) => {
-    const prep = prepareMemberCollectionForUpdate(get().household.members, memberId, collectionName);
+  deleteCollectionItem: <T extends keyof CollectionNameToTypeMap>({
+    memberId,
+    collectionName,
+    itemId,
+  }: DeleteCollectionItemParams<T>) => {
+    const members = get().household.members
+    const prep = prepareMemberCollectionForUpdate<T>({ members, memberId, collectionName });
     if (!prep) return;
   
-    // Directly incorporate deleteItem functionality here
-    const updatedCollection = prep.items.filter(item => item.id !== itemId);
-    prep.member[collectionName] = updatedCollection;
+    const updatedCollection: CollectionNameToTypeMap[T][] = prep.items.filter(item => item.id !== itemId) as CollectionNameToTypeMap[T][];
+  
+    // Correctly typing the assignment using a more refined approach
+    prep.member = {
+      ...prep.member,
+      [collectionName]: updatedCollection as unknown as Member & { [P in T]?: CollectionNameToTypeMap[T][] }[T]
+    };
+  
     prep.updatedMembers[prep.memberIndex] = prep.member;
   
     set({ household: { ...get().household, members: prep.updatedMembers } });
   },
+  
 
 
-  getCollectionSubset: ({ memberId, collectionName }: UseCollectionProps): CollectionTypeMap[T] => {
+  getCollectionSubset: <T extends keyof CollectionNameToTypeMap>({
+    memberId,
+    collectionName,
+  }: GetCollectionSubsetParams<T>): ToArrayTypes<CollectionNameToTypeMap>[T] => {
     const state = get();
     const member = state.household.members.find(m => m.id === memberId);
-    if (!member) return [] as CollectionTypeMap[T];
-
-    switch (collectionName) {
-      case 'income':
-        return (member.income?.map(({ id, sourceName }) => ({
-          id,
-          sourceName,
-        })) || []) as CollectionTypeMap[T];
-      case 'assets':
-        return (member.assets?.map(({ id, assetType }) => ({
-          id,
-          assetType,
-        })) || []) as CollectionTypeMap[T];
-      // Handle other cases as the application grows
-      default:
-        return [] as CollectionTypeMap[T];
+    if (!member || !member[collectionName]) {
+      return [] as ToArrayTypes<CollectionNameToTypeMap>[T];
     }
+ 
+    // TODO - Add functionality to limit fields
+
+    const collection = member[collectionName];
+    return collection as ToArrayTypes<CollectionNameToTypeMap>[T];
   },
 });
 
-});
 
 export default collectionActions;

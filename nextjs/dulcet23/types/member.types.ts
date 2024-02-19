@@ -1,4 +1,4 @@
-import { Asset, Income } from "./collection.types"
+import { Assets, Incomes } from "./collection.types"
 import { PersonName } from "./entity.types";
 
 export interface Member {
@@ -6,6 +6,6 @@ export interface Member {
   name: PersonName;
   dob: string; // Format: YYYY-MM-DD for PostgreSQL optimization
   ssn: string; 
-  income?: Income[];
-  assets?: Asset[];
+  income?: Incomes;
+  asset?: Assets;
 }
