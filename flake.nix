@@ -3,6 +3,8 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    flake-ndi.url = "github:matthewcroughan/flake-ndi";
+
     flake-utils.url = "github:numtide/flake-utils";
     devshell.url = "github:numtide/devshell";
     mission-control.url = "github:General-Consulting/mission-control";
@@ -21,8 +23,9 @@
 
   };
 
-  outputs = { self, nixpkgs, flake-utils, devshell, flake-parts, mission-control, flake-root, treefmt-nix, ... }@inputs:
+  outputs = { self, nixpkgs, flake-utils, devshell, flake-parts, mission-control, flake-root, treefmt-nix, flake-ndi, ... }@inputs:
     flake-parts.lib.mkFlake { inherit inputs; } {
+
 
       systems = [ "x86_64-linux" "aarch64-linux" "aarch64-darwin" "x86_64-darwin" ];
       imports = [
@@ -32,12 +35,14 @@
         inputs.devshell.flakeModule
       ];
 
-
-
-
-      perSystem = { pkgs, system, self', config, inputs', lib, ... }: 
+      perSystem = { system, self', config, inputs', lib, ... }: 
 
        let 
+      pkgs = import nixpkgs {
+        inherit system;
+        config = { allowUnfree = true; };
+      };
+
       nextUser = pkgs.runCommand "user" {} ''
         mkdir -p $out/etc
         echo "nextjs:x:1000:1000:nextjs:/home/nextjs:/bin/false" > $out/etc/passwd
@@ -69,6 +74,7 @@
             cp -r .next/static $out/app/.next/static
           '';
         };
+
       dockerImagePdf = pkgs.dockerTools.buildImage {
         name = "generalconsulting/pdf-app";
         tag = "latest";
@@ -91,9 +97,23 @@
           WorkingDir = "/app";
         };
       };
-
+  gstPlugins = with pkgs.gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+    gst-plugins-ugly
+    gst-libav
+    gstreamermm
+    gst-vaapi
+    gst-devtools
+    gst-plugins-rs
+    gst-editing-services
+    # Add more plugins as needed
+  ];
         in 
       {
+
 
 
         packages = {
@@ -113,6 +133,7 @@
 
         
         devshells.default = {
+          name = "general consulting dev environment";
           packages = with pkgs; [
             just
             config.treefmt.build.wrapper
@@ -121,27 +142,32 @@
             yarn
             kustomize
             cargo
-            devshell
-          ];
+            ndi
+            avahi
+          ] ++ gstPlugins;
 
+
+        env = [{ name = "GST_PLUGIN_PATH"; value = pkgs.lib.makeLibraryPath gstPlugins;  }
+        { name = "LD_LIBRARY_PATH"; value = pkgs.lib.makeLibraryPath [pkgs.ndi];  }];
+        
         commands = [
-         {
-            name = ",";
-            help = "bring up this menu";
-            command = "menu";
-         }
-         {
-            name = "fmt";
-            help = "format the whole repo";
-            command = "just fmt";
-         }
+          {
+              name = ",";
+              help = "bring up this menu";
+              command = "menu";
+          }
+
+          {
+              name = "fmt";
+              help = "format the whole repo";
+              command = "just fmt";
+          }
 
           {
             name = "k8s";
             help = "start minikube cluster";
             command = "just cluster";
           }
-
           {
             name = "pdf";
             help = "NextJS PDF Dev";
@@ -165,11 +191,13 @@
             help = "Use nix to build the PDF nextjs app";
             command = "nix build";
           }
+
           {
             name = "docker-build-pdf" ;
             help = "Use nix to build a docker image for the pdf-app";
             command = "nix build .#dockerImagePdf && docker load < ./result";
           }
+
           {
             name = "docker-run-pdf" ;
             help = "Use nix to build and run docker image for the pdf-app (in the foreground)";
@@ -177,8 +205,12 @@
           }
         
         ];
+        devshell.load_profiles = false;
+
 
         };
+
       };
+
     };
 }

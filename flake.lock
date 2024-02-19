@@ -19,6 +19,24 @@
         "type": "github"
       }
     },
+    "flake-ndi": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_2"
+      },
+      "locked": {
+        "lastModified": 1626287948,
+        "narHash": "sha256-2apu1nL47ZlWmvS3DcKtPacgccuRIY3UyvoXZOLLVS8=",
+        "owner": "matthewcroughan",
+        "repo": "flake-ndi",
+        "rev": "1c7a66a2fe828fabd115fb07f6eb38e564717546",
+        "type": "github"
+      },
+      "original": {
+        "owner": "matthewcroughan",
+        "repo": "flake-ndi",
+        "type": "github"
+      }
+    },
     "flake-parts": {
       "inputs": {
         "nixpkgs-lib": [
@@ -123,6 +141,22 @@
     },
     "nixpkgs_2": {
       "locked": {
+        "lastModified": 1620340338,
+        "narHash": "sha256-Op/4K0+Z9Sp5jtFH0s/zMM4H7VFZxrekcAmjQ6JpQ4w=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "63586475587d7e0e078291ad4b49b6f6a6885100",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_3": {
+      "locked": {
         "lastModified": 1706925685,
         "narHash": "sha256-hVInjWMmgH4yZgA4ZtbgJM1qEAel72SYhP5nOWX4UIM=",
         "owner": "nixos",
@@ -140,11 +174,12 @@
     "root": {
       "inputs": {
         "devshell": "devshell",
+        "flake-ndi": "flake-ndi",
         "flake-parts": "flake-parts",
         "flake-root": "flake-root",
         "flake-utils": "flake-utils_2",
         "mission-control": "mission-control",
-        "nixpkgs": "nixpkgs_2",
+        "nixpkgs": "nixpkgs_3",
         "treefmt-nix": "treefmt-nix"
       }
     },
