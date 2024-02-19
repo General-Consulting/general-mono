@@ -92,8 +92,6 @@ const collectionActions = (
     set({ household: { ...get().household, members: prep.updatedMembers } });
   },
   
-
-
   getCollectionSubset: <T extends keyof CollectionNameToTypeMap>({
     memberId,
     collectionName,

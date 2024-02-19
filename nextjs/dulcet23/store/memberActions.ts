@@ -7,7 +7,6 @@ import { findMemberIndex } from "./utils";
 const memberActions = (
   set: StoreApi<HouseholdState>['setState'],
   get: StoreApi<HouseholdState>['getState'],
-  api: StoreApi<HouseholdState>
 ) => ({  
   addMember: (newMemberData: Member) => {
     set((state) => {
