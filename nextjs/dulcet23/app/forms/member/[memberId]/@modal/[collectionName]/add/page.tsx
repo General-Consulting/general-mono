@@ -4,13 +4,18 @@ import { useParams, useRouter } from 'next/navigation'
 
 import AddCollectionItem from './AddCollectionItem';
 import Modal from '@/components/Modal';
+import isValidCollectionName from '@/utils/isValidCollectionName';
 
 const Page = () => {
   const router = useRouter()
   const { 
     memberId, 
-    collectionType,
-  } = useParams<{ memberId: string, collectionType: 'income' | 'assets' }>()
+    collectionName: collectionNameURL,
+  } = useParams<{ memberId: string, collectionName: string }>()
+  
+  const isCollectionNameValid = isValidCollectionName(collectionNameURL)
+
+
   
   const modalTitle = `Add item to ${collectionType}`
   

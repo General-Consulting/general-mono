@@ -1,12 +1,6 @@
-import AssetClass from "@/models/AssetClass";
+import collectionNameToClassMap from "@/mappings/collectionNameToClassMap"
 import CollectionBase from "@/models/CollectionBase";
-import IncomeClass from "@/models/IncomeClass";
 import { ValidCollectionName } from "@/types";
-
-const collectionNameToClassMap: Record<ValidCollectionName, new () => CollectionBase> = {
-  'income': IncomeClass,
-  'asset': AssetClass,
-};
 
 const createCollectionInstance = (collectionName: ValidCollectionName): CollectionBase => {
   const CollectionClass = collectionNameToClassMap[collectionName];
