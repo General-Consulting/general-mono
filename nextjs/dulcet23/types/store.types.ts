@@ -36,11 +36,22 @@ export interface DeleteCollectionItemParams<T extends keyof CollectionNameToType
   itemId: string;
 }
 
-// Specific type for getting a collection subset of fields, used for UI tables 
-export type GetCollectionSubsetParams<T extends keyof ToArrayTypes<CollectionNameToTypeMap>> = {
+// // Specific type for getting a collection subset of fields, used for UI tables 
+// export type GetCollectionSubsetParams<T extends keyof ToArrayTypes<CollectionNameToTypeMap>> = {
+//   memberId: string;
+//   collectionName: T;
+// };
+
+export type GetCollectionItemsParams<T extends keyof ToArrayTypes<CollectionNameToTypeMap>> = {
   memberId: string;
   collectionName: T;
 };
+
+export type GetCollectionItemByIdParams<T extends keyof CollectionNameToTypeMap> = {
+  memberId: string;
+  collectionName: T;
+  itemId: string;
+}
 
 export interface Household {
   members: Member[];
@@ -56,7 +67,13 @@ export interface HouseholdState {
   addCollectionItem: <T extends keyof CollectionNameToTypeMap>(params: AddCollectionItemParams<T>) => void;
   editCollectionItem: <T extends keyof CollectionNameToTypeMap>(params: EditCollectionItemParams<T>) => void;
   deleteCollectionItem: <T extends keyof CollectionNameToTypeMap>(params: DeleteCollectionItemParams<T>) => void;
-  getCollectionSubset: <T extends keyof ToArrayTypes<CollectionNameToTypeMap>>(
-    params: GetCollectionSubsetParams<T>
+  // getCollectionSubset: <T extends keyof ToArrayTypes<CollectionNameToTypeMap>>(
+  //   params: GetCollectionSubsetParams<T>
+  // ) => ToArrayTypes<CollectionNameToTypeMap>[T];
+  getCollectionItems: <T extends keyof ToArrayTypes<CollectionNameToTypeMap>>(
+    params: GetCollectionItemsParams<T>
   ) => ToArrayTypes<CollectionNameToTypeMap>[T];
+  getCollectionItemById: <T extends keyof CollectionNameToTypeMap>(
+    params: GetCollectionItemByIdParams<T>
+  ) => CollectionNameToTypeMap[T] | undefined
 }

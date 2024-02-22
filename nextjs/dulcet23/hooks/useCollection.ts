@@ -1,7 +1,7 @@
 'use client';
 
 import { useHouseholdStore } from "@/store/useHouseholdStore";
-import { CollectionNameToTypeMap, CollectionFunctionBaseParams, AddCollectionItemParams, EditCollectionItemParams, DeleteCollectionItemParams } from "@/types";
+import { CollectionNameToTypeMap } from "@/types";
 
 // Adjusting the UseCollectionParams to directly use keyof CollectionNameToTypeMap for type safety
 type UseCollectionParams<T> = {
@@ -14,8 +14,8 @@ interface UseCollectionReturn<T extends keyof CollectionNameToTypeMap> {
   addItem: (item: CollectionNameToTypeMap[T]) => void;
   deleteItem: (itemId: string) => void;
   editItem: (itemId: string, item: CollectionNameToTypeMap[T]) => void;
-  // items: CollectionNameToTypeMap[T][];
-  // getItemById: (itemId: string) => CollectionNameToTypeMap[T] | undefined;
+  items: CollectionNameToTypeMap[T][];
+  getItemById: (itemId: string) => CollectionNameToTypeMap[T] | undefined;
   getRequiredFields: () => string[];
   getDefaultValues: () => Partial<CollectionNameToTypeMap[T]>;
 }
@@ -28,6 +28,8 @@ const useCollection = <T extends keyof CollectionNameToTypeMap>({
     addCollectionItem,
     editCollectionItem,
     deleteCollectionItem,
+    getCollectionItems,
+    getCollectionItemById,
     // Assuming getCollectionSubset or a similar function is available for fetching items
   } = useHouseholdStore();
 
@@ -47,10 +49,10 @@ const useCollection = <T extends keyof CollectionNameToTypeMap>({
   };
 
   // Assuming items are fetched from the state, you need to implement or adjust this part based on your store setup
-  const items = [{ id: 'bob' }]; // This should be replaced with actual logic to fetch items from the store
+  const items = getCollectionItems({ memberId, collectionName }); // This should be replaced with actual logic to fetch items from the store
   
-  // Function to get an item by its ID from the items array
-  const getItemById = (itemId: string) => items.find(item => item.id === itemId);
+  // Get collection item by calling items
+  const getItemById = (itemId: string) => getCollectionItemById({ memberId, collectionName, itemId });
 
   // Placeholder for getRequiredFields and getDefaultValues. Implement based on actual requirements.
   const getRequiredFields = () => [];
@@ -60,8 +62,8 @@ const useCollection = <T extends keyof CollectionNameToTypeMap>({
     addItem, 
     deleteItem, 
     editItem, 
-    // items, 
-    // getItemById, 
+    items, 
+    getItemById, 
     getRequiredFields, 
     getDefaultValues 
   };

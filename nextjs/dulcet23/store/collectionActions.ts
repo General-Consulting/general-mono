@@ -7,7 +7,9 @@ import {
   CollectionNameToTypeMap, 
   DeleteCollectionItemParams,
   EditCollectionItemParams,
-  GetCollectionSubsetParams, 
+  // GetCollectionSubsetParams,
+  GetCollectionItemsParams,
+  GetCollectionItemByIdParams, 
   ToArrayTypes,
   Member,
   // IncomeSubset,
@@ -92,10 +94,27 @@ const collectionActions = (
     set({ household: { ...get().household, members: prep.updatedMembers } });
   },
   
-  getCollectionSubset: <T extends keyof CollectionNameToTypeMap>({
+  // getCollectionSubset: <T extends keyof CollectionNameToTypeMap>({
+  //   memberId,
+  //   collectionName,
+  // }: GetCollectionSubsetParams<T>): ToArrayTypes<CollectionNameToTypeMap>[T] => {
+  //   const state = get();
+  //   const member = state.household.members.find(m => m.id === memberId);
+  //   if (!member || !member[collectionName]) {
+  //     return [] as ToArrayTypes<CollectionNameToTypeMap>[T];
+  //   }
+ 
+  //   // TODO - Add functionality to limit fields
+
+  //   const collection = member[collectionName];
+  //   return collection as ToArrayTypes<CollectionNameToTypeMap>[T];
+  // },
+
+
+  getCollectionItems: <T extends keyof CollectionNameToTypeMap>({
     memberId,
     collectionName,
-  }: GetCollectionSubsetParams<T>): ToArrayTypes<CollectionNameToTypeMap>[T] => {
+  }: GetCollectionItemsParams<T>): ToArrayTypes<CollectionNameToTypeMap>[T] => {
     const state = get();
     const member = state.household.members.find(m => m.id === memberId);
     if (!member || !member[collectionName]) {
@@ -107,7 +126,31 @@ const collectionActions = (
     const collection = member[collectionName];
     return collection as ToArrayTypes<CollectionNameToTypeMap>[T];
   },
-});
 
+  getCollectionItemById: <T extends keyof CollectionNameToTypeMap>({ 
+    memberId, 
+    collectionName, 
+    itemId 
+  }: GetCollectionItemByIdParams<T>): CollectionNameToTypeMap[T] | undefined => {
+    const household = get().household;
+    const member = household.members.find(m => m.id === memberId);
+    if (!member || !member[collectionName]) {
+      return undefined;
+    }
+
+    const collection = member[collectionName] as CollectionNameToTypeMap[T][];
+    const item = collection.find(item => item.id === itemId);
+  
+    // Check if the item is undefined before returning
+    if (item === undefined) {
+      // Item not found, handle accordingly
+      return undefined;
+    }
+  
+    // If item is found, return it
+    return item;
+  },
+
+})
 
 export default collectionActions;

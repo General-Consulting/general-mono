@@ -23,3 +23,6 @@ export interface CollectionNameToTypeMap {
   income: Income;
   asset: Asset;
 }
+
+export type ValidCollectionName = keyof CollectionNameToTypeMap;
+export type ValidCollectionNames = ValidCollectionName[]
