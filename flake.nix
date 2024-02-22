@@ -3,7 +3,6 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-    flake-ndi.url = "github:matthewcroughan/flake-ndi";
 
     flake-utils.url = "github:numtide/flake-utils";
     devshell.url = "github:numtide/devshell";
@@ -23,7 +22,7 @@
 
   };
 
-  outputs = { self, nixpkgs, flake-utils, devshell, flake-parts, mission-control, flake-root, treefmt-nix, flake-ndi, ... }@inputs:
+  outputs = { self, nixpkgs, flake-utils, devshell, flake-parts, mission-control, flake-root, treefmt-nix,  ... }@inputs:
     flake-parts.lib.mkFlake { inherit inputs; } {
 
 
@@ -142,13 +141,12 @@
             yarn
             kustomize
             cargo
-            ndi
             avahi
           ] ++ gstPlugins;
 
 
         env = [{ name = "GST_PLUGIN_PATH"; value = pkgs.lib.makeLibraryPath gstPlugins;  }
-        { name = "LD_LIBRARY_PATH"; value = pkgs.lib.makeLibraryPath [pkgs.ndi];  }];
+        ];
         
         commands = [
           {
