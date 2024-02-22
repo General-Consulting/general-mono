@@ -1,4 +1,7 @@
-import { Member, Income, Asset } from "../types"
+import { 
+  CollectionNameToTypeMap,
+  Member 
+} from "@/types"
 
 /* 
  * Helper functions for working with the members
@@ -18,26 +21,33 @@ export const findMemberIndex = (members: Member[], memberId: string) =>
  * Partial structure --> members: [ { ..., income: [...], assets: [...] }, ... ]
  */
 
-// Generic function to add an item to a member's collection (income or assets)
-export const addItem = (items: any[], newItem: any) => [...items, newItem];
+// Type for the function parameters
+type PrepareMemberCollectionForUpdateParams<T extends keyof CollectionNameToTypeMap> = {
+  members: Member[];
+  memberId: string;
+  collectionName: T;
+};
 
-// Generic function to delete an item from a member's collection
-export const deleteItem = (items: any[], itemId: string) => 
-    items.filter(item => item.id !== itemId);
-
-// Generic function to edit an item in a member's collection
-export const editItem = (items: any[], itemId: string, updatedItemData: any) => 
-    items.map(item => item.id === itemId ? { ...item, ...updatedItemData } : item);
-
+// Type for the function return value
+type PrepareMemberCollectionForUpdateReturn<T extends keyof CollectionNameToTypeMap> = {
+  updatedMembers: Member[];
+  member: Member & { [P in T]?: CollectionNameToTypeMap[T][] };
+  memberIndex: number;
+  items: CollectionNameToTypeMap[T][];
+} | null;
 
 // Utility to prepare member and collection for modification
-export const prepareMemberCollectionForUpdate = (members: Member[], memberId: string, collectionType: 'income' | 'assets') => {
+export const prepareMemberCollectionForUpdate = <T extends keyof CollectionNameToTypeMap>(
+  { members, memberId, collectionName }: PrepareMemberCollectionForUpdateParams<T>
+): PrepareMemberCollectionForUpdateReturn<T> => {
   const memberIndex = findMemberIndex(members, memberId);
   if (memberIndex === -1) return null; // Member not found
 
   let updatedMembers = [...members];
-  let member = { ...updatedMembers[memberIndex] };
-  let items = member[collectionType] || [];
+  let member = { 
+    ...updatedMembers[memberIndex] 
+  } as Member & { [P in typeof collectionName]?: CollectionNameToTypeMap[T][] };
+  let items: CollectionNameToTypeMap[T][] = member[collectionName] as CollectionNameToTypeMap[T][] || [];
 
   return { updatedMembers, member, memberIndex, items };
 };

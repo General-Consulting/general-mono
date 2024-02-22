@@ -1,48 +1,62 @@
-import { Asset, Income, Member } from './entity.types'
+import { CollectionNameToTypeMap } from "./collection.types"
+import { Member } from "./member.types";
+import { ToArrayTypes } from "./common.types"
 
-export interface Household {
-  id?: string;
-  members: Member[];
-  // Other flat data to be defined later
-}
 
-// Args when calling editMember method
-interface EditMemberArgs {
+// Specific type for editing a member 
+export interface EditMemberParams {
   memberId: string,
   data: Member
 }
 
 // Base type for common parameters
-interface CollectionFunctionBaseArgs {
+export interface CollectionFunctionBaseParams<T extends keyof CollectionNameToTypeMap> {
   memberId: string;
-  collectionType: 'income' | 'assets';
+  collectionName: T;
 }
 
-// Specific type for adding a collection item (does not require itemId)
-interface AddCollectionItemArgs extends CollectionFunctionBaseArgs {
-  data: Asset | Income;
+// Specific type for adding a collection item
+export interface AddCollectionItemParams<T extends keyof CollectionNameToTypeMap> {
+  memberId: string;
+  collectionName: T;
+  data: CollectionNameToTypeMap[T];
 }
-
-// Specific type for editing a collection item (requires all parameters)
-interface EditCollectionItemArgs extends CollectionFunctionBaseArgs {
+// Specific type for editing a collection item, now using generics
+export type EditCollectionItemParams<T extends keyof CollectionNameToTypeMap> = {
+  memberId: string;
+  collectionName: T;
   itemId: string;
-  data: Asset | Income;
-}
+  data: CollectionNameToTypeMap[T]; // Assuming this data structure for simplification
+};
 
-// Specific type for deleting a collection item (does not require data)
-interface DeleteCollectionItemArgs extends CollectionFunctionBaseArgs {
+// Specific type for deleting a collection item
+export interface DeleteCollectionItemParams<T extends keyof CollectionNameToTypeMap> {
+  memberId: string;
+  collectionName: T;
   itemId: string;
 }
 
+// Specific type for getting a collection subset of fields, used for UI tables 
+export type GetCollectionSubsetParams<T extends keyof ToArrayTypes<CollectionNameToTypeMap>> = {
+  memberId: string;
+  collectionName: T;
+};
 
+export interface Household {
+  members: Member[];
+  // Other flat data to be defined later
+}
 
 // Adjust HouseholdState interface to use these specific types
 export interface HouseholdState {
   household: Household;
   addMember: (newMemberData: Member) => void;
-  editMember: ({ memberId, data }: EditMemberArgs) => void;
+  editMember: ({ memberId, data }: EditMemberParams) => void;
   deleteMember: (memberId: string) => void;
-  addCollectionItem: (params: AddCollectionItemArgs) => void;
-  editCollectionItem: (params: EditCollectionItemArgs) => void;
-  deleteCollectionItem: (params: DeleteCollectionItemArgs) => void;
+  addCollectionItem: <T extends keyof CollectionNameToTypeMap>(params: AddCollectionItemParams<T>) => void;
+  editCollectionItem: <T extends keyof CollectionNameToTypeMap>(params: EditCollectionItemParams<T>) => void;
+  deleteCollectionItem: <T extends keyof CollectionNameToTypeMap>(params: DeleteCollectionItemParams<T>) => void;
+  getCollectionSubset: <T extends keyof ToArrayTypes<CollectionNameToTypeMap>>(
+    params: GetCollectionSubsetParams<T>
+  ) => ToArrayTypes<CollectionNameToTypeMap>[T];
 }
