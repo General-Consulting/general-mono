@@ -20,3 +20,10 @@ export type WithId<T extends { id: string }, Extras> = T & Extras;
 export type ToArrayTypes<T> = {
   [K in keyof T]: T[K][];
 };
+
+
+// Aimed to suggest if T is a union of string literals
+export type IsStringLiteralUnion<T> = [T] extends [string] ? ([T] extends [never] ? false : true) : false;
+
+// Utility type to work directly with T as a union of strings
+export type LiteralUnionToStringUnion<T> = T extends any ? T : never;

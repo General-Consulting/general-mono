@@ -15,3 +15,5 @@ export interface PersonName {
   maiden?:string;
 }
 
+export type CompoundEntities = Address | PersonName
+

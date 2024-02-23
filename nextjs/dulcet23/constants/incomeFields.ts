@@ -1,9 +1,12 @@
 import {
   Compound,
   CompoundField,
+  CompoundEntities,
   Field,
   OptionObject,
   Income,
+  IsStringLiteralUnion,
+  LiteralUnionToStringUnion,
   OptionsField,
   SimpleField 
 } from "@/types"
@@ -18,13 +21,13 @@ function validateIncomeOptions<K extends keyof Income>(
 
 // Type for `incomeFields` constant
 export type IncomeFieldsType = {
-  [K in keyof Omit<Income, 'id'>]: K extends keyof typeof incomeFields
-    ? typeof incomeFields[K]['field'] extends Field.Radio | Field.Checkbox | Field.Select
-      ? OptionsField & { field: typeof incomeFields[K]['field'] }
-      : typeof incomeFields[K]['field'] extends Compound
+  [Property in keyof Omit<Income, 'id'>]: Income[Property] extends string[]
+    ? OptionsField
+    : Income[Property] extends CompoundEntities
         ? CompoundField // TODO: refine what a CompoundField entails
-        : SimpleField
-    : never;
+        : Income[Property] extends any
+          ? SimpleField
+          : never
 };
 
 /* `incomeFields` constant
@@ -49,5 +52,6 @@ export const incomeFields: IncomeFieldsType = {
   frequency: {
     field: Field.Radio,
     options: validateIncomeOptions('frequency', ['Weekly', 'Every two weeks', 'Twice a month', 'Monthly', 'Quarterly', 'Yearly'])
-  } 
+  },
+  bob: { field: Field.DateInput} 
 }
