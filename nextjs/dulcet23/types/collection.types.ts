@@ -1,11 +1,5 @@
 import { Address } from "./entity.types";
 
-// TODO - huh????
-function validateOptions<K extends keyof Income, T extends FlexibleOptions>(key: K, options: T): ValidateOptions<K, T> {
-  return options as ValidateOptions<K, T>;
-}
-
-
 export interface Income {
   id: string;
   sourceName: string;
