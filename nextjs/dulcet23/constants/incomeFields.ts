@@ -1,14 +1,11 @@
 import {
   Compound,
-  CompoundField,
-  CompoundEntities,
   Field,
   OptionObject,
   Income,
-  IsStringLiteralUnion,
-  LiteralUnionToStringUnion,
+  IsUnion,
   OptionsField,
-  SimpleField 
+  SimpleField, 
 } from "@/types"
 
 // Check if options prop for Radio/Checkbox/Select matches `Income` field's values
@@ -19,15 +16,10 @@ function validateIncomeOptions<K extends keyof Income>(
   return options;
 }
 
-// Type for `incomeFields` constant
 export type IncomeFieldsType = {
-  [Property in keyof Omit<Income, 'id'>]: Income[Property] extends string[]
+  [K in keyof Omit<Income, 'id'>]: IsUnion<Income[K]> extends true
     ? OptionsField
-    : Income[Property] extends CompoundEntities
-        ? CompoundField // TODO: refine what a CompoundField entails
-        : Income[Property] extends any
-          ? SimpleField
-          : never
+    : SimpleField
 };
 
 /* `incomeFields` constant
@@ -51,7 +43,13 @@ export const incomeFields: IncomeFieldsType = {
   amount: { field: Field.TextInput },
   frequency: {
     field: Field.Radio,
-    options: validateIncomeOptions('frequency', ['Weekly', 'Every two weeks', 'Twice a month', 'Monthly', 'Quarterly', 'Yearly'])
+    options: validateIncomeOptions('frequency', [
+      'Weekly', 
+      'Every two weeks', 
+      'Twice a month', 
+      'Monthly', 
+      'Quarterly', 
+      'Yearly'
+    ])
   },
-  bob: { field: Field.DateInput} 
 }

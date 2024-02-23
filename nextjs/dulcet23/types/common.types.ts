@@ -27,3 +27,9 @@ export type IsStringLiteralUnion<T> = [T] extends [string] ? ([T] extends [never
 
 // Utility type to work directly with T as a union of strings
 export type LiteralUnionToStringUnion<T> = T extends any ? T : never;
+
+export type UnionToIntersection<T> = 
+  (T extends any ? (x: T) => any : never) extends 
+  (x: infer R) => any ? R : never
+
+export type IsUnion<T> = [T] extends [UnionToIntersection<T>] ? false : true

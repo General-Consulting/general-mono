@@ -27,13 +27,15 @@ export type OptionObject<T> = { value: T; label: string };
 export type FlexibleOption = string | { label: string; value: string };
 export type FlexibleOptions = FlexibleOption[]
 
+
+export type OptionFieldTypes = Field.Radio | Field.Checkbox | Field.Select;
 export type OptionsField = BaseField & {
-  field: Field.Radio | Field.Checkbox | Field.Select;
+  field: OptionFieldTypes;
   options: FlexibleOptions;
 };
 
 export type SimpleField = BaseField & {
-  field: Field;
+  field: Exclude<Field, OptionFieldTypes>;
 };
 
 export type CompoundField = BaseField & {
@@ -42,7 +44,7 @@ export type CompoundField = BaseField & {
 };
 
 // Union type for all field variations
-export type FieldVariant = CompoundField | SimpleField;
+export type FieldVariant = CompoundField | OptionsField | SimpleField;
 
 export type FieldSpec = {
   [K in string]: FieldVariant;
