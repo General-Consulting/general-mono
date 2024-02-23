@@ -20,6 +20,10 @@ export type BaseField = {
   disabled?: () => void,
 }
 
+
+// OptionObject used in various `validateOptions` functions inside field constant files 
+export type OptionObject<T> = { value: T; label: string };
+
 export type FlexibleOption = string | { label: string; value: string };
 export type FlexibleOptions = FlexibleOption[]
 

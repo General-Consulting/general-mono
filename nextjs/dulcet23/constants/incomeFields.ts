@@ -2,24 +2,21 @@ import {
   Compound,
   CompoundField,
   Field,
-  FlexibleOptions,
+  OptionObject,
   Income,
   OptionsField,
   SimpleField 
 } from "@/types"
-import { validateOptions } from "@/utils/validateOptions"
 
-
-// Verify that a Radio/Checkbox/Select field has options prop with options that
-// correspond to values allowed by the `Income` type
-const validateIncomeOptions = <
-  K extends keyof Income
->(
+// Check if options prop for Radio/Checkbox/Select matches `Income` field's values
+function validateIncomeOptions<K extends keyof Income>(
   key: K, 
-  options: FlexibleOptions
-) => validateOptions<Income, K, FlexibleOptions>(key, options);
+  options: Array<Income[K] | OptionObject<Income[K]>>
+): Array<Income[K] | OptionObject<Income[K]>> {
+  return options;
+}
 
-// Type for the incomeFields constant
+// Type for `incomeFields` constant
 export type IncomeFieldsType = {
   [K in keyof Omit<Income, 'id'>]: K extends keyof typeof incomeFields
     ? typeof incomeFields[K]['field'] extends Field.Radio | Field.Checkbox | Field.Select
@@ -30,10 +27,21 @@ export type IncomeFieldsType = {
     : never;
 };
 
+/* `incomeFields` constant
+ * ========================
+ * Contains details about all possible fields that might be rendered.
+ * The details within this constant are then used by `FieldsFactory` 
+ * component to determine how to actually render fields.
+ * 
+ * Whether or not any fields are rendered is determined by methods 
+ * housed within `IncomeClass` and `useCollection`, which both make 
+ * use of the application schemas of particular applications (e.g. PDFs)
+ * to make that decision. 
+ */ 
 export const incomeFields: IncomeFieldsType = {
   incomeType: { 
     field: Field.Radio,
-    options: validateIncomeOptions('incomeType', ["Employment", "Dumb"])
+    options: validateIncomeOptions('incomeType', ["Employment", "Other"])
   },
   sourceName: { field: Field.TextInput },
   sourceAddress: { field: Compound.Address },
