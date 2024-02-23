@@ -25,7 +25,7 @@ export interface AddCollectionItemParams<T extends keyof CollectionNameToTypeMap
 export type EditCollectionItemParams<T extends keyof CollectionNameToTypeMap> = {
   memberId: string;
   collectionName: T;
-  itemId: string;
+  collectionItemId: string;
   data: CollectionNameToTypeMap[T]; // Assuming this data structure for simplification
 };
 
@@ -33,7 +33,7 @@ export type EditCollectionItemParams<T extends keyof CollectionNameToTypeMap> = 
 export interface DeleteCollectionItemParams<T extends keyof CollectionNameToTypeMap> {
   memberId: string;
   collectionName: T;
-  itemId: string;
+  collectionItemId: string;
 }
 
 // // Specific type for getting a collection subset of fields, used for UI tables 
@@ -50,7 +50,7 @@ export type GetCollectionItemsParams<T extends keyof ToArrayTypes<CollectionName
 export type GetCollectionItemByIdParams<T extends keyof CollectionNameToTypeMap> = {
   memberId: string;
   collectionName: T;
-  itemId: string;
+  collectionItemId: string;
 }
 
 export interface Household {

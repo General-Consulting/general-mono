@@ -39,20 +39,20 @@ const useCollection = <T extends keyof CollectionNameToTypeMap>({
   };
 
   // Delete collection item from member in household store
-  const deleteItem = (itemId: string) => {
-    deleteCollectionItem({ memberId, collectionName, itemId });
+  const deleteItem = (collectionItemId: string) => {
+    deleteCollectionItem({ memberId, collectionName, collectionItemId });
   };
 
   // Edit collection item belonging to member in household store
-  const editItem = (itemId: string, data: CollectionNameToTypeMap[T]) => {
-    editCollectionItem<T>({ memberId, collectionName, itemId, data });
+  const editItem = (collectionItemId: string, data: CollectionNameToTypeMap[T]) => {
+    editCollectionItem<T>({ memberId, collectionName, collectionItemId, data });
   };
 
   // Assuming items are fetched from the state, you need to implement or adjust this part based on your store setup
   const items = getCollectionItems({ memberId, collectionName }); // This should be replaced with actual logic to fetch items from the store
   
   // Get collection item by calling items
-  const getItemById = (itemId: string) => getCollectionItemById({ memberId, collectionName, itemId });
+  const getItemById = (itemId: string) => getCollectionItemById({ memberId, collectionName, collectionItemId });
 
   // Placeholder for getRequiredFields and getDefaultValues. Implement based on actual requirements.
   const getRequiredFields = () => [];

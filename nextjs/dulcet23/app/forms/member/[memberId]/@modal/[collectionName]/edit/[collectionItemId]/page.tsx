@@ -4,22 +4,27 @@ import { useParams, useRouter } from 'next/navigation'
 
 import EditCollectionItem from './EditCollectionItem';
 import Modal from '@/components/Modal';
+import isValidCollectionName from '@/utils/isValidCollectionName';
 
 const Page = () => {
   const router = useRouter()
   const { 
     memberId, 
-    collectionType,
-    itemId
+    collectionName,
+    collectionItemId
   } = useParams<{ 
     memberId: string, 
-    collectionType: 'income' | 'assets',
-    itemId: string 
+    collectionName: string,
+    collectionItemId: string 
   }>()
+
+  const isCollectionNameValid = isValidCollectionName(collectionName)
   
-  const modalPath = `/forms/member/${memberId}/${collectionType}/edit/${itemId}`
+  const modalPath = `/forms/member/${memberId}/${collectionName}/edit/${itemId}`
 
   const handleCancel = () => router.push(`/forms/member/${memberId}`)
+
+  if (!isCollectionNameValid) return null
 
   return (
     <Modal 
@@ -29,8 +34,8 @@ const Page = () => {
       showEditIcon
     >
       <EditCollectionItem
-        collectionType={collectionType}
-        itemId={itemId} 
+        collectionName={collectionName}
+        collectionItemId={collectionItemId} 
         memberId={memberId}
         onCancel={handleCancel} 
       />

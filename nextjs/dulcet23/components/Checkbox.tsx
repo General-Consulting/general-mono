@@ -7,20 +7,18 @@ import { ChangeHandler, Control, FieldErrors, useWatch } from 'react-hook-form'
 import ErrorIcon from './ErrorIcon'
 import ErrorMessage from './ErrorMessage'
 import HelperText from './HelperText'
+import { FlexibleOptions } from '@/types'
 import { handleErrors } from './utils/handleErrors'
+import normalizeFlexibleOption from '@/utils/normalizeFlexibleOption'
 
 /*
  * Type for radio component props.
  */
-interface Option {
-  label: string
-  value: string
-}
 
 interface CheckboxComponentProps {
   label: string
   name: string 
-  options: Option[] 
+  options: FlexibleOptions
   onChange: ChangeHandler
   onBlur: ChangeHandler
   control: Control
@@ -71,7 +69,8 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxComponentProps>(({
         </legend>
 
         <div className="grid gap-4 sm:grid-flow-col sm:auto-cols-fr">
-          {options.map((option) => {
+          {options.map((nonNormalizedOption) => {
+            const option = normalizeFlexibleOption(nonNormalizedOption)
             const isChecked = currentValue.includes(option.value)
 
             return (

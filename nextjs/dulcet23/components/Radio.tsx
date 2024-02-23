@@ -12,20 +12,17 @@ import {
 import ErrorIcon from './ErrorIcon'
 import ErrorMessage from './ErrorMessage'
 import HelperText from './HelperText'
+import { FlexibleOptions } from "@/types"
 import { handleErrors } from './utils/handleErrors'
+import normalizeFlexibleOption from '@/utils/normalizeFlexibleOption'
 
 /*
  * Type for radio component props.
  */
-interface Option {
-  label: string
-  value: string
-}
-
 interface RadioComponentProps {
   label: string
   name: string 
-  options: Option[] 
+  options: FlexibleOptions
   onChange: ChangeHandler
   onBlur: ChangeHandler
   control: Control
@@ -77,7 +74,8 @@ const Radio = forwardRef<HTMLInputElement, RadioComponentProps>(({
         </legend>
 
         <div className="grid gap-4 sm:grid-flow-col sm:auto-cols-fr">
-          {options.map((option) => {
+          {options.map((nonNormalizedOption) => {
+            const option = normalizeFlexibleOption(nonNormalizedOption)
             const isChecked = currentValue === option.value
 
             return (

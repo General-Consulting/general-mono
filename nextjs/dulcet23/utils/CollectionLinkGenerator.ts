@@ -26,23 +26,23 @@ export default class CollectionLinkGenerator {
     return `/forms/member/${memberId}/${collectionName}/${operation}`
   }
 
-  createDeleteLink(id: string): string {
+  createDeleteLink(collectionItemId: string): string {
     const memberId = this.memberId
     const collectionType = this.collectionName
     const operation = Operation.Delete
 
     // Return URL string with form: 
     // "/member/[memberId]/[collectionType]/delete/[collectionId]"
-    return `/forms/member/${memberId}/${collectionType}/${operation}/${id}`
+    return `/forms/member/${memberId}/${collectionType}/${operation}/${collectionItemId}`
   }
 
-  createEditLink(id: string): string {
+  createEditLink(collectionItemId: string): string {
     const memberId = this.memberId
     const collectionName = this.collectionName
     const operation = Operation.Edit
 
     // Return URL string with form: 
     // "/member/[memberId]/[collectionType]/edit/[collectionId]"
-    return `/forms/member/${memberId}/${collectionName}/${operation}/${id}`
+    return `/forms/member/${memberId}/${collectionName}/${operation}/${collectionItemId}`
   }
 }

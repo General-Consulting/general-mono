@@ -48,15 +48,15 @@ const collectionActions = (
   editCollectionItem: <T extends keyof CollectionNameToTypeMap>({
     memberId,
     collectionName,
-    itemId,
+    collectionItemId,
     data,
   }: EditCollectionItemParams<T>) => {
     const members = get().household.members
     const prep = prepareMemberCollectionForUpdate<T>({ members, memberId, collectionName });
     if (!prep) return;
   
-    const updatedCollection: CollectionNameToTypeMap[T][] = prep.items.map(item => 
-      item.id === itemId ? { ...item, ...data } : item
+    const updatedCollection: CollectionNameToTypeMap[T][] = prep.items.map(collectionItem => 
+      collectionItem.id === collectionItemId ? { ...collectionItem, ...data } : collectionItem
     );
   
     // Correctly typing the assignment using a more refined approach
@@ -75,13 +75,13 @@ const collectionActions = (
   deleteCollectionItem: <T extends keyof CollectionNameToTypeMap>({
     memberId,
     collectionName,
-    itemId,
+    collectionItemId,
   }: DeleteCollectionItemParams<T>) => {
     const members = get().household.members
     const prep = prepareMemberCollectionForUpdate<T>({ members, memberId, collectionName });
     if (!prep) return;
   
-    const updatedCollection: CollectionNameToTypeMap[T][] = prep.items.filter(item => item.id !== itemId) as CollectionNameToTypeMap[T][];
+    const updatedCollection: CollectionNameToTypeMap[T][] = prep.items.filter(collectionItem => collectionItem.id !== collectionItemId) as CollectionNameToTypeMap[T][];
   
     // Correctly typing the assignment using a more refined approach
     prep.member = {
@@ -130,7 +130,7 @@ const collectionActions = (
   getCollectionItemById: <T extends keyof CollectionNameToTypeMap>({ 
     memberId, 
     collectionName, 
-    itemId 
+    collectionItemId 
   }: GetCollectionItemByIdParams<T>): CollectionNameToTypeMap[T] | undefined => {
     const household = get().household;
     const member = household.members.find(m => m.id === memberId);
@@ -139,16 +139,16 @@ const collectionActions = (
     }
 
     const collection = member[collectionName] as CollectionNameToTypeMap[T][];
-    const item = collection.find(item => item.id === itemId);
+    const collectionItem = collection.find(collectionItem => collectionItem.id === collectionItemId);
   
     // Check if the item is undefined before returning
-    if (item === undefined) {
+    if (collectionItem === undefined) {
       // Item not found, handle accordingly
       return undefined;
     }
   
     // If item is found, return it
-    return item;
+    return collectionItem;
   },
 
 })

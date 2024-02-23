@@ -6,12 +6,14 @@ import DefaultButton from '@/components/DefaultButton';
 import HighlightButton from '@/components/HighlightButton';
 import { ModalDivider } from '@/components/Modal'
 import { useHouseholdStore } from '@/store/useHouseholdStore';
+import { ValidCollectionName } from '@/types';
+import useCollection from '@/hooks/useCollection';
 
 
 interface DeleteCollectionItemProps {
   onCancel: () => void;
-  collectionType: 'income' | 'assets';
-  itemId: string;
+  collectionName: ValidCollectionName;
+  collectionItemId: string;
   memberId: string;
 }
 
@@ -19,16 +21,17 @@ interface DeleteCollectionItemProps {
 
 const DeleteCollectionItem = ({
   onCancel,
-  collectionType,
-  itemId,
+  collectionName,
+  collectionItemId,
   memberId,
 }: DeleteCollectionItemProps) => {
+  const { deleteItem } = useCollection({ collectionName, memberId })
+
   const router = useRouter()
-  const { deleteCollectionItem } = useHouseholdStore()
   
   // Delete item from a particular member's collection
   const handleDelete = () => {
-    deleteCollectionItem({ memberId, collectionType, itemId })
+    deleteItem(collectionItemId)
     router.push(`/forms/member/${memberId}`)
   }
 

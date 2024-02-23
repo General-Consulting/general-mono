@@ -1,6 +1,6 @@
 'use client';
 
-import { useParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useForm, FormProvider } from 'react-hook-form'
 import { useEffect } from 'react';
 import { v4 as uuidv4 } from "uuid"
@@ -11,13 +11,14 @@ import FieldFactory from '@/components/FieldFactory';
 import HighlightButton from '@/components/HighlightButton';
 import { ModalDivider } from '@/components/Modal'
 import { allPossibleMemberFields } from '@/constants/allPossibleMembersFields'
-import { useHouseholdStore } from '@/store/useHouseholdStore';
+import { ValidCollectionName } from '@/types';
+import useCollection from '@/hooks/useCollection';
 
 
 interface AddCollectionProps {
   onCancel: () => void;
   memberId: string;
-  collectionType: 'income' | 'assets'
+  collectionName: ValidCollectionName
 }
 
 // TODO - change fieldData
@@ -25,17 +26,19 @@ interface AddCollectionProps {
 const AddCollection = ({
   onCancel,
   memberId,
-  collectionType
+  collectionName
 }: AddCollectionProps) => {
+  const { addItem } = useCollection({ collectionName, memberId })
+  
   const router = useRouter()
   // TODO - getDefaultValues
   const methods = useForm()
   const { handleSubmit, register, setValue } = methods
-  const { addCollectionItem } = useHouseholdStore()
+  
   
   // Add item to a particular member's collection
   const onSubmit = (data: any) => {
-    addCollectionItem({ memberId, collectionType, data })
+    addItem(data)
     router.push(`/forms/member/${memberId}`)
   }
 

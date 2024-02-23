@@ -10,18 +10,20 @@ const Page = () => {
   const router = useRouter()
   const { 
     memberId, 
-    collectionName: collectionNameURL,
+    collectionName,
   } = useParams<{ memberId: string, collectionName: string }>()
   
-  const isCollectionNameValid = isValidCollectionName(collectionNameURL)
+  const isCollectionNameValid = isValidCollectionName(collectionName)
 
 
   
-  const modalTitle = `Add item to ${collectionType}`
+  const modalTitle = `Add item to ${collectionName}`
   
   const modalPath = `/forms/member/${memberId}/income/add`
 
   const handleCancel = () => router.push(`/forms/member/${memberId}`)
+
+  if (!isCollectionNameValid) return null
 
   return (
     <Modal 
@@ -32,7 +34,7 @@ const Page = () => {
     >
       <AddCollectionItem
         memberId={memberId}
-        collectionType={collectionType} 
+        collectionName={collectionName} 
         onCancel={handleCancel} 
       />
     </Modal>

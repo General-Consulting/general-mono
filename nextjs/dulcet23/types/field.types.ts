@@ -20,9 +20,12 @@ export type BaseField = {
   disabled?: () => void,
 }
 
+export type FlexibleOption = string | { label: string; value: string };
+export type FlexibleOptions = FlexibleOption[]
+
 export type OptionsField = BaseField & {
   field: Field.Radio | Field.Checkbox | Field.Select;
-  options: string[];
+  options: FlexibleOptions;
 };
 
 export type SimpleField = BaseField & {

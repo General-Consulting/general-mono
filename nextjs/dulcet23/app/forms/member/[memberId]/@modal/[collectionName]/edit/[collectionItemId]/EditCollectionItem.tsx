@@ -12,12 +12,14 @@ import HighlightButton from '@/components/HighlightButton';
 import { ModalDivider } from '@/components/Modal'
 import { allPossibleMemberFields } from '@/constants/allPossibleMembersFields'
 import { useHouseholdStore } from '@/store/useHouseholdStore';
+import { ValidCollectionName } from '@/types';
+import useCollection from '@/hooks/useCollection';
 
 
 interface EditCollectionItemProps {
   onCancel: () => void;
-  collectionType: 'income' | 'assets';
-  itemId: string;
+  collectionName: ValidCollectionName;
+  collectionItemId: string;
   memberId: string;
 }
 
@@ -25,19 +27,19 @@ interface EditCollectionItemProps {
 
 const EditCollectionItem = ({
   onCancel,
-  collectionType,
-  itemId,
+  collectionName,
+  collectionItemId,
   memberId,
 }: EditCollectionItemProps) => {
+  const { editItem } = useCollection({ collectionName, memberId })
   const router = useRouter()
   // TODO - getDefaultValues
   const methods = useForm()
   const { handleSubmit, register, setValue } = methods
-  const { editCollectionItem } = useHouseholdStore()
   
   // Add item to a particular member's collection
   const onSubmit = (data: any) => {
-    editCollectionItem({ memberId, collectionType, itemId, data })
+    editItem(collectionItemId, data )
     router.push(`/forms/member/${memberId}`)
   }
 
