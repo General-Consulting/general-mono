@@ -106,7 +106,6 @@
     gstreamermm
     gst-vaapi
     gst-devtools
-    gst-plugins-rs
     gst-editing-services
     # Add more plugins as needed
   ];
