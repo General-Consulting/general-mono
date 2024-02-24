@@ -3,6 +3,10 @@ import {
   Collection,
   CollectionConstant,
   CollectionNameToTypeMap,
+  CompoundField,
+  Field,
+  OptionsField,
+  SimpleField,
   ReverseMapping 
 } from "@/types"
 import { isCompoundField } from "@/utils";
@@ -109,6 +113,42 @@ abstract class CollectionBase<C extends Collection> {
     });
   
     return { existingDefaultValues, fieldsWithoutExistingValue };
+  }
+
+  getBlankDefaultValues(
+    allNeededFields: string[],
+    filteredUIFields: Partial<CollectionConstant<C>>
+  ): Partial<C> {
+    const blankDefaultValues: Partial<C> = {} as Partial<C>;
+
+    allNeededFields.forEach(fieldPath => {
+      const pathParts = fieldPath.split('.');
+      if (pathParts.length === 1) {
+        // Handle top-level fields
+        const fieldName = pathParts[0] as keyof CollectionConstant<C>;
+        if (fieldName in filteredUIFields) {
+          const fieldType = filteredUIFields[fieldName]?.field;
+          blankDefaultValues[fieldName] = (fieldType === Field.Checkbox ? [] : "") as any;
+        }
+      } else if (pathParts.length === 2) {
+        // Handle one-level-deep nested fields
+        const [parentField, childField] = pathParts;
+        const parentFieldName = parentField as keyof typeof filteredUIFields;
+        if (parentFieldName in filteredUIFields) {
+          const compoundField = filteredUIFields[parentFieldName] as CompoundField;
+          // Ensure we're dealing with a compound field with components
+          // if (compoundField && 'components' in compoundField) {
+          const childComponent = compoundField?.components?.[childField] as SimpleField | OptionsField;
+          if (childComponent) {
+            const childFieldType = childComponent.field;
+            blankDefaultValues[parentFieldName] = blankDefaultValues[parentFieldName] || {} as any;
+            (blankDefaultValues[parentFieldName] as any)[childField] = childFieldType === Field.Checkbox ? [] : "";
+          }
+        }
+      }
+    })
+
+    return blankDefaultValues;
   }
 
   getDefaultValues(): Partial<Record<string, any>> {
