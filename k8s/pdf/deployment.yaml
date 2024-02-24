@@ -17,13 +17,6 @@ spec:
         app.kubernetes.io/name: pdf-app
       annotations:
     spec:
-      volumes:
-        - name: config
-          configMap:
-            name: mailslurper-config
-        - name: cert
-          secret:
-            secretName: mailslurper-cert
       containers:
         - name: pdf-app
           image: "generalconsulting/pdf-app:latest"
