@@ -1,3 +1,5 @@
+import CollectionBase from "@/models/CollectionBase";
+
 import { IsUnion } from "./common.types";
 import { Address } from "./entity.types";
 import { 
@@ -51,6 +53,22 @@ export type ValidCollectionName = keyof CollectionNameToTypeMap;
 export type ValidCollectionNames = ValidCollectionName[]
 
 export type Collection = Asset | Income
+
+/* Collection Class Types
+ * ======================
+ * These types are fundamentally about working with the
+ * each collection class/model, as well as the factory function
+ * responsible for creating an instant of class based on 
+ * the `collectionName` passed to the function.
+ */  
+
+// Define a type for the constructor of each collection class
+export type CollectionConstructor<T extends Collection> = new () => CollectionBase<T>;
+
+// Define a mapping type that relates each ValidCollectionName to its constructor type
+export type CollectionClassMap = {
+  [K in ValidCollectionName]: CollectionConstructor<CollectionNameToTypeMap[K]>;
+};
 
 
 /* `CollectionConstant` & derived fields types

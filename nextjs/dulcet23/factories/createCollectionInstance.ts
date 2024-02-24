@@ -12,7 +12,7 @@ function createCollectionInstance<K extends ValidCollectionName>(
   if (!CollectionClass) {
     throw new Error(`Invalid collection name: ${collectionName}`);
   }
-  return new CollectionClass();
+  return new CollectionClass() as CollectionBase<CollectionNameToTypeMap[K]>;
 }
 
 export default createCollectionInstance
