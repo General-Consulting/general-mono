@@ -6,7 +6,7 @@ class AssetClass extends CollectionBase<Asset> {
   constructor() {
     super({
       collectionName: 'asset',
-      requiredFields: ['assetType'],
+      baseRequiredFields: ['assetType'],
       subsetFields: ['assetName', 'assetType', 'value'],
       uiFields: assetFields
     })

@@ -6,7 +6,7 @@ class IncomeClass extends CollectionBase<Income> {
   constructor() {
     super({
       collectionName: 'income',
-      requiredFields: ['incomeType'],
+      baseRequiredFields: ['incomeType'],
       subsetFields: ['sourceName', 'incomeType', 'frequency'],
       uiFields: incomeFields
     })

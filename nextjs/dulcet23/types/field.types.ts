@@ -51,5 +51,5 @@ export type FieldSpec = {
 };
 
 export type CompoundStructure = {
-  [K in Compound]?: { [key: string]: SimpleField };
+  [K in Compound]: { [key: string]: SimpleField | OptionsField };
 };
