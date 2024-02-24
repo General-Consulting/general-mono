@@ -9,7 +9,10 @@ import {
   SimpleField,
   ReverseMapping 
 } from "@/types"
-import { isCompoundField } from "@/utils";
+import { 
+  combineObjects,
+  isCompoundField 
+} from "@/utils";
 
 type GetExistingDefaultValuesResults<C> = {
   existingDefaultValues: Partial<C>,
@@ -40,7 +43,14 @@ abstract class CollectionBase<C extends Collection> {
     this.uiFields = uiFields
   }
 
-  getFilteredUIFields(allNeededFields: string[]): Partial<CollectionConstant<C>> {
+  /* prepareUIFields method
+   * ======================
+   * Two related purposes: Filter fields constant to get only 
+   * the UI fields that should be rendered.  Also, for Compound
+   * fields, get only UI fields that should be rendered and 
+   * add them to a `components` property on the Compound field.
+   */ 
+  prepareUIFields(allNeededFields: string[]): Partial<CollectionConstant<C>> {
     const filteredFields: Partial<CollectionConstant<C>> = {};
 
     Object.keys(this.uiFields).forEach((key) => {
@@ -151,14 +161,15 @@ abstract class CollectionBase<C extends Collection> {
     return blankDefaultValues;
   }
 
-  getDefaultValues(): Partial<Record<string, any>> {
-    const defaults: Partial<Record<string, any>> = {};
-    // Object.keys(this.fieldsMetadata).forEach(field => {
-    //   defaults[field] = this.fieldsMetadata[field].defaultValue || null;
-    // });
-    return defaults;
-  }
+  combineDefaultValues(existingDefaultValues: Partial<C>, blankDefaultValues: Partial<C>): Partial<C> {
+    // Clone existingDefaultValues to avoid mutating the input directly
+    const result = JSON.parse(JSON.stringify(existingDefaultValues));
 
+    // Combine the cloned existing values with the blank values
+    return combineObjects(result, blankDefaultValues);
+  }
 }
+
+
 
 export default CollectionBase
