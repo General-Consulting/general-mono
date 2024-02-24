@@ -1,26 +1,15 @@
 import {
+  CollectionConstant,
   Compound,
   Field,
-  OptionObject,
   Income,
-  IsUnion,
-  OptionsField,
-  SimpleField, 
 } from "@/types"
+import { createValidateOptionsForCollection } from "@/utils/createValidationOptionsForCollection";
 
-// Check if options prop for Radio/Checkbox/Select matches `Income` field's values
-function validateIncomeOptions<K extends keyof Income>(
-  key: K, 
-  options: Array<Income[K] | OptionObject<Income[K]>>
-): Array<Income[K] | OptionObject<Income[K]>> {
-  return options;
-}
 
-export type IncomeFieldsType = {
-  [K in keyof Omit<Income, 'id'>]: IsUnion<Income[K]> extends true
-    ? OptionsField
-    : SimpleField
-};
+const validateIncomeOptions = createValidateOptionsForCollection<Income>()
+
+export type IncomeFieldsType = CollectionConstant<Income>
 
 /* `incomeFields` constant
  * ========================

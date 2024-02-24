@@ -1,40 +1,15 @@
 import {
-  Compound,
-  CompoundField,
   Field,
   OptionObject,
   Asset,
-  OptionsField,
-  SimpleField 
+  CollectionConstant
 } from "@/types"
+import { createValidateOptionsForCollection } from "@/utils/createValidationOptionsForCollection";
 
-// Check if options prop for Radio/Checkbox/Select matches `Income` field's values
-function validateAssetOptions<K extends keyof Asset>(
-  key: K, 
-  options: Array<Asset[K] | OptionObject<Asset[K]>>
-): Array<Asset[K] | OptionObject<Asset[K]>> {
-  return options;
-}
 
-// Type for `incomeFields` constant
-export type AssetFieldsType = {
-  [K in keyof Omit<Asset, 'id'>]: K extends keyof typeof assetFields
-    ? typeof assetFields[K]['field'] extends Field.Radio | Field.Checkbox | Field.Select
-      ? OptionsField & { field: typeof assetFields[K]['field'] }
-      : typeof assetFields[K]['field'] extends Compound
-        ? CompoundField // TODO: refine what a CompoundField entails
-        : SimpleField
-    : never;
-};
+const validateAssetOptions = createValidateOptionsForCollection<Asset>()
 
-// export type AssetFieldsType = {
-//   [K in keyof Omit<Asset, 'id'>]: 
-//     Field.Radio | Field.Checkbox | Field.Select extends Asset[K]
-//       ? OptionsField
-//       : Compound extends Asset[K]
-//         ? CompoundField
-//         : SimpleField;
-// };
+export type AssetFieldsType = CollectionConstant<Asset>
 
 /* `assetFields` constant
  * ========================

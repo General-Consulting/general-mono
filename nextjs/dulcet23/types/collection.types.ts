@@ -1,4 +1,10 @@
+import { IsUnion } from "./common.types";
 import { Address } from "./entity.types";
+import { 
+  CompoundField, 
+  OptionsField, 
+  SimpleField, 
+} from "./field.types";
 
 export interface Income {
   id: string;
@@ -26,3 +32,14 @@ export interface CollectionNameToTypeMap {
 
 export type ValidCollectionName = keyof CollectionNameToTypeMap;
 export type ValidCollectionNames = ValidCollectionName[]
+
+export type Collection = Asset | Income
+
+export type CollectionConstant<C extends Collection> = {
+  [K in keyof Omit<C, 'id'>]: IsUnion<C[K]> extends true
+    ? OptionsField
+    : C[K] extends string | number
+      ? SimpleField
+      : CompoundField
+};
+
