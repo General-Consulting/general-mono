@@ -21,15 +21,13 @@ export type ToArrayTypes<T> = {
   [K in keyof T]: T[K][];
 };
 
-
-// Aimed to suggest if T is a union of string literals
-export type IsStringLiteralUnion<T> = [T] extends [string] ? ([T] extends [never] ? false : true) : false;
-
-// Utility type to work directly with T as a union of strings
-export type LiteralUnionToStringUnion<T> = T extends any ? T : never;
-
 export type UnionToIntersection<T> = 
   (T extends any ? (x: T) => any : never) extends 
   (x: infer R) => any ? R : never
 
 export type IsUnion<T> = [T] extends [UnionToIntersection<T>] ? false : true
+
+// Get interface key based on its value
+export type ReverseMapping<T, Map> = {
+  [K in keyof Map]: Map[K] extends T ? K : never;
+}[keyof Map];

@@ -3,13 +3,12 @@ import {
   Compound,
   Field,
   Income,
+  IncomeFieldsType,
 } from "@/types"
 import { createValidateOptionsForCollection } from "@/utils/createValidationOptionsForCollection";
 
 
 const validateIncomeOptions = createValidateOptionsForCollection<Income>()
-
-export type IncomeFieldsType = CollectionConstant<Income>
 
 /* `incomeFields` constant
  * ========================

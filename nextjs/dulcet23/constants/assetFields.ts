@@ -1,15 +1,12 @@
 import {
-  Field,
-  OptionObject,
   Asset,
-  CollectionConstant
+  AssetFieldsType,
+  Field,
 } from "@/types"
 import { createValidateOptionsForCollection } from "@/utils/createValidationOptionsForCollection";
 
 
 const validateAssetOptions = createValidateOptionsForCollection<Asset>()
-
-export type AssetFieldsType = CollectionConstant<Asset>
 
 /* `assetFields` constant
  * ========================
