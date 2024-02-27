@@ -5,7 +5,7 @@ import {
   ValidCollectionName 
 } from "@/types";
 
-function createCollectionInstance<K extends ValidCollectionName>(
+function createCollectionClassInstance<K extends ValidCollectionName>(
   collectionName: K
 ): CollectionBase<CollectionNameToTypeMap[K]> {
   const CollectionClass = collectionNameToClassMap[collectionName];
@@ -15,4 +15,4 @@ function createCollectionInstance<K extends ValidCollectionName>(
   return new CollectionClass() as CollectionBase<CollectionNameToTypeMap[K]>;
 }
 
-export default createCollectionInstance
+export default createCollectionClassInstance

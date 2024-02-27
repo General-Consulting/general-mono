@@ -81,7 +81,7 @@ abstract class CollectionBase<C extends Collection> {
     return filteredFields;
   }
 
-  getExistingDefaultValues(
+  getExistingDefaultValuesAndMissingFields(
     allNeededFields: string[], 
     collectionItem: C
   ): GetExistingDefaultValuesResults<C> {
