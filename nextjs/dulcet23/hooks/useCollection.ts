@@ -25,8 +25,8 @@ interface UseCollectionReturn<T extends ValidCollectionName> {
   editItem: (itemId: string, item: CollectionNameToTypeMap[T]) => void;
   items: CollectionNameToTypeMap[T][];
   getItemById: (itemId: string) => CollectionNameToTypeMap[T] | undefined;
-  getRequiredFields: () => string[];
-  getDefaultValues: () => Partial<CollectionNameToTypeMap[T]>;
+  defaultValuesForAdd: Partial<CollectionNameToTypeMap[T]>;
+  uiFieldsForAdd: Partial<CollectionConstant<CollectionNameToTypeMap[T]>>;
   defaultValuesForEdit: Partial<CollectionNameToTypeMap[T]>;
   uiFieldsForEdit: Partial<CollectionConstant<CollectionNameToTypeMap[T]>>
 }
@@ -43,9 +43,17 @@ const useCollection = <T extends ValidCollectionName>({
   collectionName,
   collectionItemId 
 }: UseCollectionParams<T>): UseCollectionReturn<T> => {
+  // Hold reference to Collection class
   const collectionRef = useRef<CollectionBase<CollectionNameToTypeMap[T]>>();
+  
+  // Hold values needed for form that adds item to collection
+  const [ defaultValuesForAdd, setDefaultValuesForAdd ] = useState({})
+  const [ uiFieldsForAdd, setUIFieldsForAdd ] = useState({})
+
+  // Hold values needed for form that edits existing item in collection
   const [ defaultValuesForEdit, setDefaultValuesForEdit ] = useState({})
   const [ uiFieldsForEdit, setUIFieldsForEdit ] = useState({})
+
 
 
   const { 
@@ -97,13 +105,46 @@ const useCollection = <T extends ValidCollectionName>({
   // Get collection item by calling items
   const getItemById = (itemId: string) => getCollectionItemById({ memberId, collectionName, collectionItemId: itemId });
 
-  // Placeholder for getRequiredFields and getDefaultValues. Implement based on actual requirements.
-  const getRequiredFields = () => [];
-  const getDefaultValues = () => ({});
+
+  /* Prepare to add item
+   * ===================
+   * The form for adding an item to a collection requires blank default 
+   * values based on the list of filtered UI fields -- [] for checkboxes and
+   * "" for all other fields -- as well as the UI field details. This 
+   * useEffect updates those state values -- defaultValuesForAdd & 
+   * uiFieldsForAdd -- and re-runs whenever any of the hook's props change. 
+   */ 
+  useEffect(() => {
+    const prepareForEditing = () => {
+      // Get class
+      const Collection = collectionRef.current;
+
+      if (!Collection) return [{}, {}]
+  
+      const filteredUIFields = Collection.prepareUIFields(allNeededFieldsForTesting)
+  
+      if (!collectionItemId) return [{}, {}];
+    
+      // For any values not in store, generate blank default values, i.e. "" or []
+      const blankDefaultValues = Collection.getBlankDefaultValues(
+        allNeededFieldsForTesting,
+        filteredUIFields
+      )
+    
+      return [ blankDefaultValues, filteredUIFields ]
+  
+    }
+
+    const [ defaultValues, filteredUIFields ] = prepareForEditing()
+
+    setDefaultValuesForAdd(defaultValues);
+    setUIFieldsForAdd(filteredUIFields)
+    
+  }, [ memberId, collectionName, collectionItemId ])
 
 
-  /* Prepare to edit
-   * ===============
+  /* Prepare to edit item
+   * ====================
    * The form for editing existing collection item requires default values
    * based on the values inside the store, as well as a list of filtered
    * UI fields with details on how to render the fields. This useEffect 
@@ -173,9 +214,9 @@ const useCollection = <T extends ValidCollectionName>({
     deleteItem, 
     editItem, 
     items, 
-    getItemById, 
-    getRequiredFields, 
-    getDefaultValues,
+    getItemById,
+    defaultValuesForAdd,
+    uiFieldsForAdd, 
     defaultValuesForEdit,
     uiFieldsForEdit, 
   };
